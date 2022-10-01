@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/01 10:20:30 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/01 10:41:42 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,8 @@ INCL	:= -Iincludes -I$(LIBDIR)/includes -I$(LIBDIR)/libft
 CC		:= gcc
 CFLAGS	:= -Wall -Werror -Wextra # Not specified by subject, but ?
 
+RM		:= /bin/rm -rf
+
 # Rules
 all : $(NAME)
 
@@ -45,7 +47,7 @@ $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) $(INCL) -c $< -o $@
 
 clean :
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(OBJDIR)
 	$(MAKE) -C $(LIBDIR) clean
 
 fclean : clean
