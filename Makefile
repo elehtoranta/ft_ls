@@ -6,11 +6,11 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/09/29 15:53:53 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/01 10:20:30 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	:= fs_ls
+NAME	:= ft_ls
 
 SRCDIR	:= sources
 SRCS	:= main.c \

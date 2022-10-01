@@ -6,16 +6,25 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:44 by elehtora          #+#    #+#             */
-/*   Updated: 2022/09/29 16:45:04 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/01 10:31:46 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-/*static void	match_options(t_options *op, char c_option)*/
-/*{*/
-	
-/*}*/
+static void	match_option(t_options *op, char *c_option)
+{
+	static const uint16_t	option_bitflags[N_OPTIONS] =
+	{
+		O_LONG, O_REC, O_ALL, O_REV, O_MTIME
+	};
+	int	index;
+
+	// We want to access the array by index, to expand the value to the
+	// correct bitflag.
+	index = ft_strchr(OPTION_CHARS, *c_option) - OPTION_CHARS;
+	op->options |= option_bitflags[index];
+}
 
 static void	set_options(const char *option_string, t_options *op)
 {
@@ -26,10 +35,7 @@ static void	set_options(const char *option_string, t_options *op)
 		c_option = ft_strpbrk(option_string, OPTION_CHARS);
 		if (c_option == NULL)
 			break ;
-		// need to loop for reading multiple options per string
-		// sets index corresponding to char index in OPTION_CHARS
-		op->options |= 1 + (ft_strchr(OPTION_CHARS, *c_option) - OPTION_CHARS);
-		/*match_option(op, *c_option);*/
+		match_option(op, c_option);
 		option_string++;
 	}
 }
@@ -51,11 +57,10 @@ static char	*validate(const char *option_string)
 	if (chars_until_unfit < ft_strlen(option_string))
 		return ((char *)&option_string[chars_until_unfit]);
 	return (NULL);
-
 }
 
 /* Parse options. Options can be chained -<char...char> or given separately
- * <-char -char...>. Literal -- means end of arguments.
+ * <-char -char...>. Literal -- means end of option arguments.
  *
  * Returns pointer to the first argument that wasn't an option argument
  * and should be interpreted as input parameter (i.e. file).
@@ -63,19 +68,16 @@ static char	*validate(const char *option_string)
 #define OPT_BUFSIZE 64 // Option string max size
 char	**parse_options(t_options *op, char **argv, int argc)
 {
-	char	buf[OPT_BUFSIZE];
 	char	*non_valid;
 
 	while (argc-- > 1)
 	{
-		ft_bzero(buf, OPT_BUFSIZE);
 		if (*argv[0] != '-' || ft_strequ(*argv, "--"))
 			break ;
-		ft_strcpy(buf, *argv);
-		non_valid = validate(buf + 1);
+		non_valid = validate(*argv + 1);
 		if (non_valid)
 			print_usage(*non_valid);
-		set_options(buf + 1, op);
+		set_options(*argv + 1, op);
 		argv++;
 	}
 	return (argv);
