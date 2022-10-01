@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:44 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/01 10:31:46 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/01 11:22:32 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ static char	*validate(const char *option_string)
  * and should be interpreted as input parameter (i.e. file).
  */
 #define OPT_BUFSIZE 64 // Option string max size
-char	**parse_options(t_options *op, char **argv, int argc)
+char	**parse_options(t_options *op, char **argv, int *argc)
 {
 	char	*non_valid;
 
-	while (argc-- > 1)
+	while ((*argc)-- > 1)
 	{
 		if (*argv[0] != '-' || ft_strequ(*argv, "--"))
 			break ;
