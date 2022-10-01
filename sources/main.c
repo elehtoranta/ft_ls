@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/01 12:22:35 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/01 12:52:18 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main(int argc, char **argv)
 	// Send full list of arg strings
 	argv = parse_options(&options, &argv[1], &argc);
 	if (argc)
-		list(&options, argv, argc);
+		list_args(&options, argv, argc);
 
 	return (EXIT_SUCCESS);
 }

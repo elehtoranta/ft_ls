@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/01 12:10:46 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/01 12:57:46 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct	s_dirplist
 // Parser function. Checks the validity of options, and sets the option struct.
 char	**parse_options(t_options *op, char **argv, int *argc);
 
-void	list(t_options *op, char **argv, int argc);
+void	list_args(t_options *op, char **argv, int argc);
 
 // Error wrapper to print perror(msg) and exit(EXIT_FAILURE)
 void	ls_error(const char *errormsg);
