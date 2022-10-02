@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/01 13:10:16 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/01 18:20:04 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,11 @@ static void	list(t_options *op, char **argv)
 
 	dirp = opendir(*argv);
 	if (!dirp)
-		ls_error("Opening directory stream failed");
+	{
+		ft_printf("ft_ls: cannot access '%s': ", *argv);
+		perror("");
+		return ;
+	}
 	while (1)
 	{
 		dirent = readdir(dirp);
