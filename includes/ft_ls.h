@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/01 12:57:46 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/02 12:43:39 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,19 @@ typedef struct	s_options
 	uint32_t	options;
 }				t_options;
 
-// 
+typedef struct		s_flist
+{
+	t_dirent		*dirent;
+	t_stat			*stat;
+	struct s_flist	*next;
+}					t_flist;
+
+// Directory stream linked list for recursive (-R) invocations
 typedef struct	s_dirplist
 {
-	DIR	*dirp;
-	DIR	*next;
+	DIR			*dirp;
+	t_flist		*flist;
+	DIR			*next;
 }				t_dirplist;
 
 // Parser function. Checks the validity of options, and sets the option struct.
@@ -54,5 +62,10 @@ void	list_args(t_options *op, char **argv, int argc);
 
 // Error wrapper to print perror(msg) and exit(EXIT_FAILURE)
 void	ls_error(const char *errormsg);
+
+// File list functions
+t_flist	*init_flist(void);
+t_flist	*prepend_flist(t_flist *head, t_flist *new);
+t_flist	*pop_flist(t_flist *head);
 
 #endif
