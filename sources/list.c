@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:40:58 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/02 12:40:43 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/02 13:30:22 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,3 +53,12 @@ t_flist	*pop_flist(t_flist *head)
 	return (NULL);
 }
 
+/* Frees and NULLs (deletes) the entire flist structure.
+ */
+void	delete_flist(t_flist **head)
+{
+	while (*head != NULL)
+	{
+		*head = pop_flist(*head);
+	}
+}

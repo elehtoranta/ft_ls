@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/02 12:43:39 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/02 14:01:10 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct	s_options
 
 typedef struct		s_flist
 {
-	t_dirent		*dirent;
+	t_dirent		*dirent; // man readdir(2): do not attempt to free()
 	t_stat			*stat;
 	struct s_flist	*next;
 }					t_flist;
@@ -68,4 +68,4 @@ t_flist	*init_flist(void);
 t_flist	*prepend_flist(t_flist *head, t_flist *new);
 t_flist	*pop_flist(t_flist *head);
 
-#endif
+# endif
