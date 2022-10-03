@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 19:56:32 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/03 21:11:09 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	delete_flist(t_flist **head);
 
 // Sorting function dispatcher. Makes use of small utility functions,
 // of which some are part of ft library.
-typedef int	sorter(const char *first, const char *second);
+typedef int	sorter(t_flist *first, t_flist *second);
 void		sort(t_options *op, t_flist **head);
 
 # endif

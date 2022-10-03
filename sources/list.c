@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:40:58 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 20:00:07 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/03 20:17:02 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void	prepend_flist(t_flist **head, t_flist *new)
 	*head = new;
 }
 
-	/* Deletes the head of a file list and returns the new head (node after the
-	 * previous head).
+/* Deletes the head of a file list and returns the new head (node after the
+ * previous head).
  *
  * NOTE: Returning NULL means we've reached the end of the list. This case
  * needs to be handled in caller to avoid dereferencing a NULL pointer.
