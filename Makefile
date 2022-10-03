@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/01 12:09:50 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/03 15:22:12 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,9 @@ NAME	:= ft_ls
 SRCDIR	:= sources
 SRCS	:= main.c \
 		   parser.c \
-		   reader.c
+		   reader.c \
+		   sort.c \
+		   list.c
 
 OBJDIR	:= objects
 OBJS	:= $(SRCS:.c=.o)
