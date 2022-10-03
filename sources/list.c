@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:40:58 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 15:22:23 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/03 20:00:07 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,32 +29,32 @@ t_flist	*init_fnode(void)
 
 /* Adds the element 'new' as the new head of the file list starting at 'head'.
  */
-t_flist	*prepend_flist(t_flist *head, t_flist *new)
+void	prepend_flist(t_flist **head, t_flist *new)
 {
 	if (new == NULL)
-		return (NULL);
-	if (head != NULL)
-		new->next = head;
-	return (new);
+		return ;
+	if (*head != NULL)
+		new->next = *head;
+	*head = new;
 }
 
-/* Deletes the head of a file list and returns the new head (node after the
- * previous head).
+	/* Deletes the head of a file list and returns the new head (node after the
+	 * previous head).
  *
  * NOTE: Returning NULL means we've reached the end of the list. This case
  * needs to be handled in caller to avoid dereferencing a NULL pointer.
  */
-t_flist	*pop_flist(t_flist *head)
+void	pop_flist(t_flist **head)
 {
 	t_flist	*new_head;
 
 	if (head)
 	{
-		new_head = head->next;
-		free(head);
-		return (new_head);
+		new_head = (*head)->next;
+		free((*head)->dirent);
+		free(*head);
+		*head = new_head;
 	}
-	return (NULL);
 }
 
 /* Frees and NULLs (deletes) the entire flist structure.
@@ -62,7 +62,5 @@ t_flist	*pop_flist(t_flist *head)
 void	delete_flist(t_flist **head)
 {
 	while (*head != NULL)
-	{
-		*head = pop_flist(*head);
-	}
+		pop_flist(head);
 }

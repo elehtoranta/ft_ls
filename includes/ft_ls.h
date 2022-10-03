@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 15:17:56 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:56:32 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@ void	ls_error(const char *errormsg);
 
 // File list functions
 t_flist	*init_fnode(void);
-t_flist	*prepend_flist(t_flist *head, t_flist *new);
-t_flist	*pop_flist(t_flist *head);
+void	prepend_flist(t_flist **head, t_flist *new);
+void	pop_flist(t_flist **head);
+void	delete_flist(t_flist **head);
 
 // Sorting function dispatcher. Makes use of small utility functions,
 // of which some are part of ft library.

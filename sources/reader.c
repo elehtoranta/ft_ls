@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 15:51:00 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/03 20:01:48 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	collect_flist(t_flist **head, DIR *dirp)
 		if (!fnode->dirent)
 			ls_error("Allocating memory to directory entry failed");
 		ft_memcpy(fnode->dirent, dirent, sizeof(*dirent));
-		*head = prepend_flist(*head, fnode);
+		prepend_flist(head, fnode);
 	}
 }
 
@@ -40,7 +40,6 @@ static void	test_output(t_flist *head)
 	while (head)
 	{
 		ft_printf("%s\n", head->dirent->d_name); // TODO replace with real formatting
-		free(head->dirent);
 		head = head->next;
 	}
 }
@@ -79,6 +78,7 @@ static void	list(t_options *op, char *path)
 		// }
 	// }
 	test_output(head);
+	delete_flist(&head);
 	free(path);
 	status = closedir(dirp);
 	if (status == -1)

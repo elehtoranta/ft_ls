@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/01 12:52:18 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:33:07 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(int argc, char **argv)
 	if (argc < 2)
 	{
 	// TODO default no options for current dir, NOT ERROR
-		printf("usage: [%s]\n", OPTION_CHARS);
+		ft_printf("usage: [%s]\n", OPTION_CHARS);
 		return (0);
 	}
 	init_options(&options);

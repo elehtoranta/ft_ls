@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:59:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 15:51:22 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/03 20:10:56 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,26 +35,24 @@ void	sort(t_options *op, t_flist **head)
 	sorter	*compare[N_SORTF] = { ft_strcmp };
 	t_flist			*flist;
 	t_flist			*prev;
-	/*bool			sorted;*/
 
-	/*sorted = false;*/
+	(void)op;
+	(void)compare;
 	flist = *head;
-	/*while (sorted == false)*/
-	/*{*/
-		/*sorted = true;*/
-		while (flist->next)
+	prev = *head;
+	while (flist->next)
+	{
+		if (compare[op->options & MASK_SORT](
+			flist->dirent->d_name,
+			flist->next->dirent->d_name) > 0)
+		{
+			swap_items(&flist, head, &prev);
+			flist = *head;
+		}
+		else
 		{
 			prev = flist;
-			if (compare[op->options & MASK_SORT](
-				flist->dirent->d_name,
-				flist->next->dirent->d_name) < 0)
-			{
-				swap_items(&flist, head, &prev);
-				/*sorted = false;*/
-				flist = *head;
-			}
-			else
-				flist = flist->next;
+			flist = flist->next;
 		}
-	/*}*/
+	}
 }
