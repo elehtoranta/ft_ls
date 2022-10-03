@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:40:58 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 20:17:02 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/03 22:00:30 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_flist	*init_fnode(void)
 	flist->dirent = NULL;
 	flist->stat = NULL;
 	flist->next = NULL;
+	flist->cmp_name = NULL;
 	return (flist);
 }
 
@@ -51,6 +52,7 @@ void	pop_flist(t_flist **head)
 	if (head)
 	{
 		new_head = (*head)->next;
+		free((*head)->cmp_name);
 		free((*head)->dirent);
 		free(*head);
 		*head = new_head;

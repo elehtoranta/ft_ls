@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 21:11:09 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/03 22:04:24 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct		s_flist
 	t_dirent		*dirent; // man readdir(2): do not attempt to free()
 	t_stat			*stat;
 	struct s_flist	*next;
+	char			*cmp_name;
 }					t_flist;
 
 // Directory stream linked list for recursive (-R) invocations

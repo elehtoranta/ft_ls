@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/03 15:22:12 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/03 21:44:27 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,3 +56,5 @@ clean :
 fclean : clean
 	$(RM) $(NAME)
 	$(MAKE) -C $(LIBDIR) fclean
+
+re : fclean all

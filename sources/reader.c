@@ -6,11 +6,40 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 20:01:48 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/03 22:12:57 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+// H4CK3RM4N5
+static void	st_tolower(char *c)
+{
+	*c = ft_tolower(*c);
+}
+
+/* Format strings ready for lexicographical comparison. '.', '..'
+ * and hidden files (.*) get special treatment. The comparison is
+ * also case agnostic.
+ */
+static char	*lex_strip(char *str)
+{
+	char	*stripped;
+
+	stripped = NULL;
+	if (str[0] == '.' && !(ft_strequ(str, ".") || ft_strequ(str, "..")))
+		stripped = ft_strdup(str + 1);
+	else
+		stripped = ft_strdup(str);
+	if (!stripped)
+		return (NULL);
+	ft_striter(stripped, st_tolower);
+/*#define DEBUG*/
+#ifdef DEBUG
+	ft_printf("String '%s' stripped: %s\n", str, stripped);
+#endif
+	return (stripped);
+}
 
 static void	collect_flist(t_flist **head, DIR *dirp)
 {
@@ -32,6 +61,9 @@ static void	collect_flist(t_flist **head, DIR *dirp)
 			ls_error("Allocating memory to directory entry failed");
 		ft_memcpy(fnode->dirent, dirent, sizeof(*dirent));
 		prepend_flist(head, fnode);
+		(*head)->cmp_name = lex_strip((*head)->dirent->d_name);
+		if (!(*head)->cmp_name)
+			return ;
 	}
 }
 
