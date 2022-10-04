@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/04 16:40:25 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/04 20:00:40 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdbool.h>
 # include <dirent.h>
 # include <errno.h>
+# include <sys/stat.h>
+# include <time.h>
 # include "ft_printf.h"
 
 // Options available. Expanded when adding supported options.
@@ -47,10 +49,11 @@ typedef struct	s_options
 
 typedef struct		s_flist
 {
-	t_dirent		*dirent; // man readdir(2): do not attempt to free()
+	t_dirent		*dirent;
 	t_stat			*stat;
-	struct s_flist	*next;
 	char			*cmp_name;
+	char			*path;
+	struct s_flist	*next;
 }					t_flist;
 
 // Directory stream linked list for recursive (-R) invocations

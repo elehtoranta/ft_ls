@@ -6,12 +6,13 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/04 16:24:38 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/04 20:01:22 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
+/*#define DEBUG*/
 // H4CK3RM4N5
 static void	st_tolower(char *c)
 {
@@ -34,14 +35,38 @@ static char	*lex_strip(char *str)
 	if (!stripped)
 		return (NULL);
 	ft_striter(stripped, st_tolower);
-/*#define DEBUG*/
 #ifdef DEBUG
 	ft_printf("String '%s' stripped: %s\n", str, stripped);
 #endif
 	return (stripped);
 }
 
-static void	collect_flist(t_flist **head, DIR *dirp)
+static void	add_stat(t_flist *fnode, const char *dir)
+{
+	t_stat	stat;
+	char	*path;
+
+	path = ft_strdjoin(dir, "/", fnode->dirent->d_name);
+	if (!path)
+		ls_error("Path allocation failed");
+#ifdef DEBUG
+	ft_printf("Path: %s\n", path);
+#endif
+	if (lstat(path, &stat) == -1)
+		ls_error("Lstat failed");
+	fnode->stat = (t_stat *)malloc(sizeof(stat));
+	if (!fnode->stat && errno == ENOMEM)
+		ls_error("Stat allocation failed");
+	ft_memcpy(fnode->stat, &stat, sizeof(stat));
+#ifdef DEBUG
+	ft_printf("Allocated stat size data: %lu\n", fnode->stat->st_size);
+	ft_printf("Allocated stat creation time: %s\n", ctime(&fnode->stat->st_mtime));
+#endif
+	free(path);
+}
+
+#define DEBUG
+static void	collect_flist(t_flist **head, DIR *dirp, const char *path)
 {
 	t_flist		*fnode;
 	t_dirent	*dirent;
@@ -60,6 +85,7 @@ static void	collect_flist(t_flist **head, DIR *dirp)
 		if (!fnode->dirent)
 			ls_error("Allocating memory to directory entry failed");
 		ft_memcpy(fnode->dirent, dirent, sizeof(*dirent));
+		add_stat(fnode, path);
 		prepend_flist(head, fnode);
 		(*head)->cmp_name = lex_strip((*head)->dirent->d_name);
 		if (errno == ENOMEM)
@@ -76,42 +102,57 @@ static void	test_output(t_flist *head)
 	}
 }
 
+/*static void	list_file()*/
+/*{*/
+	/*format()*/
+/*}*/
+
 static void	list(t_options *op, char *path)
 {
 	DIR			*dirp;
 	t_flist		*head;
+	t_stat		stat;
 	int			status;
 
-	head = NULL;
-	dirp = opendir(path);
-	if (!dirp)
+	if (lstat(path, &stat) == -1)
+		ls_error("stat error");
+	if (!(stat.st_mode & S_IFDIR))
 	{
-		ft_printf("ft_ls: cannot access '%s': ", path);
-		perror("");
-		free(path);
-		return ;
+		ft_printf("Yes.\n");
 	}
-	collect_flist(&head, dirp);
-	if (!head)
-		ls_error("File list initialization failed");
-	sort(op, &head);
-	// format()
-	// output()
-	// if (op->option & O_REC) // Recurse
-	// {
-		// fetch_dirnames(); // to send for recursion (after sort)
-		// while (dirplist->dirp)
-		// {
-		// 	list(dirplist->dirp, ft_strdjoin(path, "/", get_next_dir(flist));
-		// 	dirplist->dirp = dirplist->next // Consumes the list
-		// }
-	// }
-	test_output(head);
-	delete_flist(&head);
-	free(path);
-	status = closedir(dirp);
-	if (status == -1)
-		ls_error("Closing directory stream failed");
+	else
+	{
+		head = NULL;
+		dirp = opendir(path);
+		if (!dirp)
+		{
+			ft_printf("ft_ls: cannot access '%s': ", path);
+			perror("");
+			free(path);
+			return ;
+		}
+		collect_flist(&head, dirp, path);
+		if (!head)
+			ls_error("File list initialization failed");
+		sort(op, &head);
+		// format()
+		// output()
+		/*if (op->option & O_REC) Recurse*/
+		/*{*/
+			/*fetch_dirnames(); to send for recursion (after sort)*/
+			/*while (dirplist->dirp)*/
+			/*{*/
+				/*list(dirplist->dirp, ft_strdjoin(path, "/", get_next_dir(flist));*/
+				/*dirplist->dirp = dirplist->next Consumes the list*/
+			/*}*/
+		/*}*/
+		test_output(head);
+		delete_flist(&head);
+		free(path);
+		status = closedir(dirp);
+		if (status == -1)
+			ls_error("Closing directory stream failed");
+	}
 }
 
 /* Iterate through file arguments
