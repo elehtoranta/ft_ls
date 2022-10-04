@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:59:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/04 13:32:35 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/04 16:26:39 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,7 @@
  */
 static int	lex_cmp(t_flist *first, t_flist *second)
 {
-	if (first->cmp_name == NULL && second->cmp_name == NULL)
-		return (ft_strcmp(first->dirent->d_name, second->dirent->d_name));
-	else
-	{
-		if (first->cmp_name && second->cmp_name)
-			return (ft_strcmp(first->cmp_name, second->cmp_name));
-		else if (first->cmp_name == NULL)
-			return (ft_strcmp(first->dirent->d_name, second->cmp_name));
-		else
-			return (ft_strcmp(first->cmp_name, second->dirent->d_name));
-	}
-	/*return (0);*/
+	return (ft_strcmp(first->dirent->d_name, second->dirent->d_name));
 }
 
 /* Swaps places of two items in a flist linked list.
