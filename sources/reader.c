@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 22:12:57 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/04 13:35:20 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*lex_strip(char *str)
 	if (str[0] == '.' && !(ft_strequ(str, ".") || ft_strequ(str, "..")))
 		stripped = ft_strdup(str + 1);
 	else
-		stripped = ft_strdup(str);
+		return (NULL);
 	if (!stripped)
 		return (NULL);
 	ft_striter(stripped, st_tolower);
@@ -62,7 +62,7 @@ static void	collect_flist(t_flist **head, DIR *dirp)
 		ft_memcpy(fnode->dirent, dirent, sizeof(*dirent));
 		prepend_flist(head, fnode);
 		(*head)->cmp_name = lex_strip((*head)->dirent->d_name);
-		if (!(*head)->cmp_name)
+		if (errno == ENOMEM)
 			return ;
 	}
 }
