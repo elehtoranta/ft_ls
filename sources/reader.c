@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/04 13:35:20 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/04 16:24:38 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,6 @@ static void	list(t_options *op, char *path)
 	int			status;
 
 	head = NULL;
-	// FIXME remove compiler suppressing
-	(void)op;
-
 	dirp = opendir(path);
 	if (!dirp)
 	{
@@ -123,6 +120,9 @@ void	list_args(t_options *op, char **argv, int argc)
 {
 	char	*path;
 
+	// No file/directory arguments
+	if (argc == 0)
+		list(op, ft_strdup("."));
 	while (argc--)
 	{
 		path = ft_strdup(*argv);

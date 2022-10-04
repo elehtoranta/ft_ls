@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:44 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/01 18:25:24 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/04 16:15:58 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ static char	*validate(const char *option_string)
  * Returns pointer to the first argument that wasn't an option argument
  * and should be interpreted as input parameter (i.e. file).
  */
-#define OPT_BUFSIZE 64 // Option string max size
 char	**parse_options(t_options *op, char **argv, int *argc)
 {
 	char	*non_valid;
