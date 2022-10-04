@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/04 20:00:40 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/04 23:51:55 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,11 @@ typedef struct		s_flist
 }					t_flist;
 
 // Directory stream linked list for recursive (-R) invocations
-typedef struct	s_dirplist
+typedef struct			s_dirlist
 {
-	DIR			*dirp;
-	t_flist		*flist;
-	DIR			*next;
-}				t_dirplist;
+	char				*dirpath;
+	struct s_dirlist	*next;
+}						t_dirlist;
 
 // Parser function. Checks the validity of options, and sets the option struct.
 char	**parse_options(t_options *op, char **argv, int *argc);
