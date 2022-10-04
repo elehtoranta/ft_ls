@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:44 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/04 16:15:58 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/04 16:41:53 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,14 @@ static void	match_option(t_options *op, char *c_option)
 	// We want to access the array by index, to expand the value to the
 	// correct bitflag.
 	index = ft_strchr(OPTION_CHARS, *c_option) - OPTION_CHARS;
+#ifdef DEBUG
+	ft_printf("index: %d, option: %c\n", index, OPTION_CHARS[index]);
+#endif
 	op->options |= option_bitflags[index];
+#ifdef DEBUG
+	if (op->options & S_MTIME)
+		ft_printf("MTIME option toggled\n");
+#endif
 }
 
 static void	set_options(const char *option_string, t_options *op)

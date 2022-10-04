@@ -6,12 +6,12 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:59:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/04 16:26:39 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/04 16:54:43 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-#define N_SORTF 1
+#define N_SORTF 2
 
 /* Compare strings. Comparison is made either with the formatted strings
  * (cmp_name) or the 'pure' argument names (dirent->d_name)
@@ -19,6 +19,14 @@
 static int	lex_cmp(t_flist *first, t_flist *second)
 {
 	return (ft_strcmp(first->dirent->d_name, second->dirent->d_name));
+}
+
+static int	mtime_cmp(t_flist *first, t_flist *second)
+{
+	// TODO placeholder: compare with data from t_stat
+	(void)first;
+	(void)second;
+	return (0); // FIXME
 }
 
 /* Swaps places of two items in a flist linked list.
@@ -40,7 +48,7 @@ static void	swap_items(t_flist **first, t_flist **head, t_flist **prev)
  */
 void	sort(t_options *op, t_flist **head)
 {
-	sorter	*compare[N_SORTF] = { lex_cmp };
+	sorter	*compare[N_SORTF] = { lex_cmp, mtime_cmp };
 	t_flist	*flist;
 	t_flist	*prev;
 
@@ -48,7 +56,7 @@ void	sort(t_options *op, t_flist **head)
 	prev = *head;
 	while (flist->next)
 	{
-		if (compare[op->options & MASK_SORT](flist, flist->next) > 0)
+		if (compare[(op->options & MASK_SORT) >> 8](flist, flist->next) > 0)
 		{
 			swap_items(&flist, head, &prev);
 			flist = *head;

@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/03 22:04:24 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/04 16:40:25 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define O_REC		0x0002
 # define O_ALL		0x0004
 # define O_REV		0x0008
-# define O_MTIME	0x0010
+# define O_MTIME	0x0100
 
 // Sorting options (2 bits == 4 permutations)
 # define MASK_SORT	0x0300
