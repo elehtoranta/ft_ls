@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/05 00:13:30 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/06 01:59:05 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,150 +65,115 @@ static void	add_stat(t_flist *fnode, const char *dir)
 	free(path);
 }
 
-static void	collect_flist(t_flist **head, DIR *dirp, const char *path)
+static t_flist	*collect_flist(t_flist **head, DIR *dirp, const char *path)
 {
 	t_flist		*fnode;
+	t_flist		*last;
 	t_dirent	*dirent;
 
-	(void)path;
+	last = NULL;
 	while (1)
 	{
 		dirent = readdir(dirp);
 		if (errno == EBADF)
 			ls_error("Reading directory stream failed");
 		if (!dirent)
-			return ;
+			return (*head);
 		fnode = init_fnode();
 		if (!fnode)
 			ls_error("Initializing file node failed");
+		if (*head == NULL)
+			*head = fnode;
 		fnode->dirent = (t_dirent *)malloc(sizeof(*dirent));
 		if (!fnode->dirent)
 			ls_error("Allocating memory to directory entry failed");
 		ft_memcpy(fnode->dirent, dirent, sizeof(*dirent));
 		add_stat(fnode, path);
-		prepend_flist(head, fnode);
+		last = append_flist(&last, fnode);
 #ifdef DEBUG
 		ft_printf("head name: %s\n", (*head)->dirent->d_name);
 #endif
-		(*head)->cmp_name = lex_strip((*head)->dirent->d_name);
+		fnode->cmp_name = lex_strip((*head)->dirent->d_name);
 		if (errno == ENOMEM)
-			return ;
+			ls_error("File name allocation failed");
 	}
+	return (*head);
 }
 
-static void	test_output(t_flist *head)
+static void	test_output(t_flist *flist)
 {
-	while (head)
-	{
-		ft_printf("%s\n", head->dirent->d_name); // TODO replace with real formatting
-		head = head->next;
-	}
-}
-
-/*static void	list_file()*/
-/*{*/
-	/*format()*/
-/*}*/
-
-static void	append_dirlist(t_dirlist **head, t_dirlist *new)
-{
-	t_dirlist	*current;
-
-	current = *head;
-	if (*head == NULL)
-		*head = new;
-	else
-	{
-		while (current->next)
-			current = current->next;
-		current->next = new;
-	}
-}
-
-/* Collects directory paths that are sent to recursive listing calls.
- * Special relative directories (. and ..) are excluded since recursing
- * into them would cause infinite listing.
- */
-static void	collect_dirnames(t_flist *flist, t_dirlist **dirlist, char *path)
-{
-	t_dirlist	*dirnode;
-	t_dirlist	*head;
-
-	dirnode = NULL;
-	head = NULL;
 	while (flist)
 	{
-		if ((flist->stat->st_mode & S_IFMT) == S_IFDIR
+		ft_printf("%s\n", flist->dirent->d_name); // TODO replace with real formatting
+		flist = flist->next;
+	}
+}
+
+static void	recurse_directories(t_options *op, char *path, t_flist *flist)
+{
+	char	*dirpath;
+
+	dirpath = NULL;
+	while (flist)
+	{
+		if ((flist->stat->st_mode & S_IFMT) == S_IFDIR // TODO Add permission mode checks
 				&& !(ft_strequ(flist->dirent->d_name, ".")
 				|| ft_strequ(flist->dirent->d_name, "..")))
 		{
-			dirnode = (t_dirlist *)malloc(sizeof(*dirnode));
-			if (!dirnode)
-				ls_error("Directory name node allocation failed");
-			dirnode->next = NULL;
-			dirnode->dirpath = ft_strdjoin(path, "/", flist->dirent->d_name);
-			if (!dirnode->dirpath)
-				ls_error("Directory path string allocation failed");
-			append_dirlist(&head, dirnode);
+			dirpath = ft_strdjoin(path, "/", flist->dirent->d_name);
+			if (!dirpath)
+				ls_error("Path name allocation failed");
+			ft_printf("\n%s:\n", dirpath);
+			list(op, dirpath);
+			free(dirpath);
 		}
 		flist = flist->next;
 	}
-	*dirlist = head;
-#ifdef DEBUG
-	while (head)
-	{
-		ft_printf("dirpath: %s\n", head->dirpath);
-		head = head->next;
-	}
-#endif
 }
 
-static void	list(t_options *op, char *path)
+void	list_dir(t_options *op, char *path)
 {
 	DIR			*dirp;
 	t_flist		*flist;
+
+	flist = NULL;
+	dirp = opendir(path);
+	if (!dirp)
+	{
+		ft_printf("ft_ls: cannot access '%s': ", path);
+		perror("");
+		return ;
+	}
+	if (!collect_flist(&flist, dirp, path))
+		ls_error("File list initialization failed");
+	sort(op, &flist);
+	// format()
+	// output()
+	test_output(flist);
+	if (op->options & O_REC)
+		recurse_directories(op, path, flist);
+	delete_flist(&flist);
+	if (closedir(dirp) == -1)
+		ls_error("Closing directory stream failed");
+}
+
+void	list(t_options *op, char *path)
+{
 	t_stat		stat;
-	t_dirlist	*dirlist;
 
 	if (lstat(path, &stat) == -1)
 		ls_error("stat error");
 	if (!((stat.st_mode & S_IFMT) == S_IFDIR))
 	{
-		ft_printf("Yes.\n");
+		/*format();*/
+		/*output();*/
+		ft_printf("Yes.\n"); //FIXME placeholder
 	}
 	else
 	{
-		flist = NULL;
-		dirp = opendir(path);
-		if (!dirp)
-		{
-			ft_printf("ft_ls: cannot access '%s': ", path);
-			perror("");
-			free(path);
-			return ;
-		}
-		collect_flist(&flist, dirp, path);
-		if (!flist)
-			ls_error("File list initialization failed");
-		sort(op, &flist);
-		// format()
-		// output()
-		test_output(flist);
-		if (op->options & O_REC)
-		{
-			collect_dirnames(flist, &dirlist, path); // to send for recursion (after sort)
-			while (dirlist)
-			{
-				ft_printf("\n%s:\n", dirlist->dirpath);
-				list(op, dirlist->dirpath);
-				dirlist = dirlist->next; // Consumes the list; FIXME Leaks, no free anywhere.
-			}
-		}
-		delete_flist(&flist);
-		free(path);
-		if (closedir(dirp) == -1)
-			ls_error("Closing directory stream failed");
+		list_dir(op, path);
 	}
+	free(path);
 }
 
 /* Iterate through file arguments

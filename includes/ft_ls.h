@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/04 23:51:55 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/06 01:11:35 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct			s_dirlist
 // Parser function. Checks the validity of options, and sets the option struct.
 char	**parse_options(t_options *op, char **argv, int *argc);
 
+void	list(t_options *op, char *path);
 void	list_args(t_options *op, char **argv, int argc);
 
 // Error wrapper to print perror(msg) and exit(EXIT_FAILURE)
@@ -73,6 +74,7 @@ void	ls_error(const char *errormsg);
 
 // File list functions
 t_flist	*init_fnode(void);
+t_flist	*append_flist(t_flist **last, t_flist *new);
 void	prepend_flist(t_flist **head, t_flist *new);
 void	pop_flist(t_flist **head);
 void	delete_flist(t_flist **head);

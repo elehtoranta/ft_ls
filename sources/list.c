@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:40:58 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/04 18:17:44 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/06 01:15:50 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,25 @@ t_flist	*init_fnode(void)
 	flist->path = NULL;
 	flist->next = NULL;
 	return (flist);
+}
+
+/* Adds a new element to the end of a list.
+ * For performance, the parameter 'last' is passed
+ * instead of head, so the whole list is not traversed
+ * just for insertion. Yet, the function works (albeit
+ * unoptimally) when an earlier node is passed.
+ */
+t_flist	*append_flist(t_flist **last, t_flist *new)
+{
+	if (new == NULL)
+		return (*last);
+	if (*last != NULL)
+	{
+		while ((*last)->next)
+			*last = (*last)->next;
+		(*last)->next = new;
+	}
+	return (new);
 }
 
 /* Adds the element 'new' as the new head of the file list starting at 'head'.
@@ -50,7 +69,8 @@ void	pop_flist(t_flist **head)
 {
 	t_flist	*new_head;
 
-	if (head)
+	// NULL list is no-op
+	if (head && *head)
 	{
 		new_head = (*head)->next;
 		free((*head)->stat);
