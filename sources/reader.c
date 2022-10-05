@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/06 01:59:05 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/06 02:17:55 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static void	add_stat(t_flist *fnode, const char *dir)
 	t_stat	stat;
 	char	*path;
 
+	ft_printf("Adding stats\n");
 	path = ft_strdjoin(dir, "/", fnode->dirent->d_name);
 	if (!path)
 		ls_error("Path allocation failed");
@@ -65,7 +66,7 @@ static void	add_stat(t_flist *fnode, const char *dir)
 	free(path);
 }
 
-static t_flist	*collect_flist(t_flist **head, DIR *dirp, const char *path)
+static t_flist	*collect_flist(t_flist **head, DIR *dirp, const char *path, t_options *op)
 {
 	t_flist		*fnode;
 	t_flist		*last;
@@ -88,7 +89,9 @@ static t_flist	*collect_flist(t_flist **head, DIR *dirp, const char *path)
 		if (!fnode->dirent)
 			ls_error("Allocating memory to directory entry failed");
 		ft_memcpy(fnode->dirent, dirent, sizeof(*dirent));
-		add_stat(fnode, path);
+		(void)op;
+		if (op->options & (O_LONG | MASK_SORT | O_REC))
+			add_stat(fnode, path);
 		last = append_flist(&last, fnode);
 #ifdef DEBUG
 		ft_printf("head name: %s\n", (*head)->dirent->d_name);
@@ -125,7 +128,6 @@ static void	recurse_directories(t_options *op, char *path, t_flist *flist)
 				ls_error("Path name allocation failed");
 			ft_printf("\n%s:\n", dirpath);
 			list(op, dirpath);
-			free(dirpath);
 		}
 		flist = flist->next;
 	}
@@ -144,7 +146,7 @@ void	list_dir(t_options *op, char *path)
 		perror("");
 		return ;
 	}
-	if (!collect_flist(&flist, dirp, path))
+	if (!collect_flist(&flist, dirp, path, op))
 		ls_error("File list initialization failed");
 	sort(op, &flist);
 	// format()
