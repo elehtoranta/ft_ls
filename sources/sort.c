@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:59:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/04 16:54:43 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/06 02:44:30 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #define N_SORTF 2
 
 /* Compare strings. Comparison is made either with the formatted strings
- * (cmp_name) or the 'pure' argument names (dirent->d_name)
+ * (cmp_name) or the 'pure' argument names (filename)
  */
 static int	lex_cmp(t_flist *first, t_flist *second)
 {
-	return (ft_strcmp(first->dirent->d_name, second->dirent->d_name));
+	return (ft_strcmp(first->filename, second->filename));
 }
 
 static int	mtime_cmp(t_flist *first, t_flist *second)

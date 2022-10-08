@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/06 01:11:35 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/08 23:52:17 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <dirent.h>
 # include <errno.h>
 # include <sys/stat.h>
+# include <pwd.h>
+# include <grp.h>
 # include <time.h>
 # include "ft_printf.h"
 
@@ -37,9 +39,16 @@
 # define S_LEX		0x0000
 # define S_MTIME	0x0100
 
+// Masking for time option selected. The time displayed in
+// long format can represent time modified, created or last
+// accessed.
+# define MASK_TIME	0x0300 // FIXME expanded upon adding time options
+
 // Aliasing to reduce typing 'struct' every time on use
 typedef struct stat		t_stat;
 typedef struct dirent	t_dirent;
+typedef struct passwd	t_passwd;
+typedef struct group	t_group;
 
 // Bitfield formatting data
 typedef struct	s_options
@@ -49,19 +58,26 @@ typedef struct	s_options
 
 typedef struct		s_flist
 {
-	t_dirent		*dirent;
 	t_stat			*stat;
+	char			*filename;
 	char			*cmp_name;
-	char			*path;
 	struct s_flist	*next;
 }					t_flist;
 
-// Directory stream linked list for recursive (-R) invocations
-typedef struct			s_dirlist
+// Field width formatting for long format.
+// Comments are of form: whitespace before + content + whitespace after
+// Whitespace is of course not repeated, but shared between adjecent
+// blocks.
+# define PERMS_FW	11 // + 1
+# define DATE_FW	12 // 1 + 12 + 1
+typedef struct		s_longform
 {
-	char				*dirpath;
-	struct s_dirlist	*next;
-}						t_dirlist;
+	uint32_t		hardlinks; // 1 + digits + 1
+	uint32_t		size; // 2 + digits + 1
+	char			*author; // 1 + strlen + 2
+	char			*group; // 2 + strlen + 2
+	char			*date; // reformat date into the right string
+}					t_longform;
 
 // Parser function. Checks the validity of options, and sets the option struct.
 char	**parse_options(t_options *op, char **argv, int *argc);
@@ -83,5 +99,8 @@ void	delete_flist(t_flist **head);
 // of which some are part of ft library.
 typedef int	sorter(t_flist *first, t_flist *second);
 void		sort(t_options *op, t_flist **head);
+
+// Output formatter
+void		format(t_options *op, t_flist *flist);
 
 # endif

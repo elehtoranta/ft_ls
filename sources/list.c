@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:40:58 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/06 01:15:50 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/06 02:45:59 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,9 @@ t_flist	*init_fnode(void)
 	flist = (t_flist *)malloc(sizeof(t_flist));
 	if (!flist)
 		return (NULL);
-	flist->dirent = NULL;
 	flist->stat = NULL;
+	flist->filename = NULL;
 	flist->cmp_name = NULL;
-	flist->path = NULL;
 	flist->next = NULL;
 	return (flist);
 }
@@ -74,9 +73,8 @@ void	pop_flist(t_flist **head)
 	{
 		new_head = (*head)->next;
 		free((*head)->stat);
-		free((*head)->dirent);
+		free((*head)->filename);
 		free((*head)->cmp_name);
-		free((*head)->path);
 		free(*head);
 		*head = new_head;
 	}
