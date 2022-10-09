@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/08 23:52:17 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/09 01:22:56 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct		s_flist
 	t_stat			*stat;
 	char			*filename;
 	char			*cmp_name;
+	t_longform		*lform;
 	struct s_flist	*next;
 }					t_flist;
 
@@ -72,8 +73,8 @@ typedef struct		s_flist
 # define DATE_FW	12 // 1 + 12 + 1
 typedef struct		s_longform
 {
-	uint32_t		hardlinks; // 1 + digits + 1
-	uint32_t		size; // 2 + digits + 1
+	nlink_t			hardlinks; // 1 + digits + 1
+	off_t			size; // 2 + digits + 1
 	char			*author; // 1 + strlen + 2
 	char			*group; // 2 + strlen + 2
 	char			*date; // reformat date into the right string

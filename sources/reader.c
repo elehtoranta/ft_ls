@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/06 02:49:59 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/09 00:39:35 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static void	add_stat(t_flist *fnode, const char *dir)
 	t_stat	stat;
 	char	*path;
 
-	ft_printf("Adding stats\n");
 	path = ft_strdjoin(dir, "/", fnode->filename);
 	if (!path)
 		ls_error("Path allocation failed");

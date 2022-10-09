@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/08 23:54:12 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/09 01:22:53 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,31 @@
 
 /*}*/
 
-static int	get_longform(t_longform *longform, t_flist *fnode)
+/* Gets the common attributes for the long format, so that the field widths
+ * can be aligned correctly.
+ */
+static void	get_common_format(t_longform *longform, t_flist *flist)
+{
+	nlink_t	links;
+	size_t	author_len;
+	size_t	group_len;
+	off_t	size;
+
+	links = 0;
+	author_len = 0;
+	group_len = 0;
+	size = 0;
+	while (flist)
+	{
+		if (flist->stat->st_nlink > links)
+			links = flist->stat->st_nlink;
+		if (flist->stat->st_size > size)
+			size = flist->stat->st_size;
+		if (ft_strlen(passwd->pw_name) > author_len)
+	}
+}
+
+static int	get_unique_format(t_longform *longform, t_flist *fnode)
 {
 	t_passwd	*passwd;
 	t_group		*group;
@@ -70,7 +94,7 @@ static void	output_date(time_t format_time)
 	ft_memcpy(datebuf + 6, " ", 1);
 	if (ft_labs(format_time - time(NULL)) > SECS_IN_6_MONTHS)
 	{
-		ft_strncat(datebuf, unformatted_date + 20, 4);
+		ft_strncat(datebuf, unformatted_date + 19, 5); // Changed from + 20, 4 to accommodate preceding space
 	}
 	else
 	{
@@ -79,16 +103,36 @@ static void	output_date(time_t format_time)
 	ft_printf("%s", datebuf);
 }
 
+static void	init_lform(t_flist *fnode)
+{
+	t_longform	*lform;
+
+	lform = (t_longform *)malloc(sizeof(t_longform));
+	if (!lform)
+		ls_error("Long format allocation failed");
+	flist->lform = lform;
+}
+
+static void	iterate_flist(t_flist *flist, void (*f)(t_flist *))
+{
+	while (flist)
+	{
+		f(flist);
+		flist = flist->next;
+	}
+}
+
 void	format(t_options *op, t_flist *flist)
 {
 	t_longform	fwidths;
 
+	get_common_format(&fwidths, flist);
 	while (flist)
 	{
 		if (op->options & O_LONG) // TODO 6 mo mtime diff -> ctime then - ctime (secs) now to monts
 		{
 			/*ft_printf("Do long boi stuff\n"); //FIXME REMOVEME*/
-			if (get_longform(&fwidths, flist) == -1)
+			if (get_unique_format(&fwidths, flist) == -1)
 				break ; // TODO Check this
 			printf("%-*s ", PERMS_FW, "----------"); //FIXME after ft_printf supports *
 			printf("%*u ", (int)fwidths.hardlinks, flist->stat->st_nlink); //FIXME after ft_printf supports *
