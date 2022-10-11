@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/09 01:22:56 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 03:37:23 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,6 @@ typedef struct	s_options
 	uint16_t	options;
 }				t_options;
 
-typedef struct		s_flist
-{
-	t_stat			*stat;
-	char			*filename;
-	char			*cmp_name;
-	t_longform		*lform;
-	struct s_flist	*next;
-}					t_flist;
-
 // Field width formatting for long format.
 // Comments are of form: whitespace before + content + whitespace after
 // Whitespace is of course not repeated, but shared between adjecent
@@ -79,6 +70,23 @@ typedef struct		s_longform
 	char			*group; // 2 + strlen + 2
 	char			*date; // reformat date into the right string
 }					t_longform;
+
+typedef struct		s_fwidths
+{
+	uint16_t		links_len;
+	uint16_t		author_len;
+	uint16_t		group_len;
+	uint16_t		size_len;
+}					t_fwidths;
+
+typedef struct		s_flist
+{
+	t_stat			*stat;
+	char			*filename;
+	char			*cmp_name;
+	t_longform		*lform;
+	struct s_flist	*next;
+}					t_flist;
 
 // Parser function. Checks the validity of options, and sets the option struct.
 char	**parse_options(t_options *op, char **argv, int *argc);

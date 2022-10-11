@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/09 01:22:53 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 03:43:58 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,46 +20,70 @@
 /* Gets the common attributes for the long format, so that the field widths
  * can be aligned correctly.
  */
-static void	get_common_format(t_longform *longform, t_flist *flist)
+static void	get_common_widths(t_fwidths *fwidths, t_flist *flist)
 {
-	nlink_t	links;
-	size_t	author_len;
-	size_t	group_len;
-	off_t	size;
-
-	links = 0;
-	author_len = 0;
-	group_len = 0;
-	size = 0;
+	fwidths->links_len = 0;
+	fwidths->author_len = 0;
+	fwidths->group_len = 0;
+	fwidths->size_len = 0;
 	while (flist)
 	{
-		if (flist->stat->st_nlink > links)
-			links = flist->stat->st_nlink;
-		if (flist->stat->st_size > size)
-			size = flist->stat->st_size;
-		if (ft_strlen(passwd->pw_name) > author_len)
+		if (ft_count_digs(flist->stat->st_nlink) > fwidths->links_len)
+			fwidths->links_len = ft_count_digs(flist->stat->st_nlink);
+		if (ft_strlen(flist->lform->author) > fwidths->author_len)
+			fwidths->author_len = ft_strlen(flist->lform->author);
+		if (ft_strlen(flist->lform->group) > fwidths->group_len)
+			fwidths->group_len = ft_strlen(flist->lform->group);
+		if (ft_count_digs(flist->stat->st_size) > fwidths->size_len)
+			fwidths->size_len = ft_count_digs(flist->stat->st_size);
+		flist = flist->next;
 	}
 }
 
-static int	get_unique_format(t_longform *longform, t_flist *fnode)
+/*static void	get_id_info()*/
+/*{*/
+
+/*}*/
+
+static t_longform	*init_lform(void)
 {
+	t_longform	*lform;
+
+	lform = (t_longform *)malloc(sizeof(t_longform));
+	if (!lform)
+		ls_error("Long format allocation failed");
+	lform->hardlinks = 0;
+	lform->size = 0;
+	lform->author = NULL;
+	lform->group = NULL;
+	lform->date = NULL;
+	return (lform);
+}
+
+static void	get_unique_forms(t_flist *fnode)
+{
+	t_longform	*lform;
 	t_passwd	*passwd;
 	t_group		*group;
 
-	passwd = getpwuid(fnode->stat->st_uid);
-	group = getgrgid(fnode->stat->st_gid);
-	if (!passwd || !group)
+	lform = NULL;
+	while (fnode)
 	{
-		perror("UID or GID data not found");
-		return (-1);
+		lform = init_lform();
+		passwd = getpwuid(fnode->stat->st_uid);
+		group = getgrgid(fnode->stat->st_gid);
+		if (!passwd || !group)
+		{
+			perror("UID or GID data not found");
+			return ;
+		}
+		lform->author = ft_strdup(passwd->pw_name);
+		lform->group = ft_strdup(group->gr_name);
+		if (!lform->author || !lform->group)
+			ls_error("Allocation of author or group strings failed");
+		fnode->lform = lform;
+		fnode = fnode->next;
 	}
-	longform->hardlinks = (uint32_t)ft_count_digs(fnode->stat->st_nlink);
-	longform->size = (uint32_t)ft_count_digs(fnode->stat->st_size);
-	longform->author = ft_strdup(passwd->pw_name);
-	longform->group = ft_strdup(group->gr_name);
-	if (!longform->author || !longform->group)
-		ls_error("Allocation of author or group strings failed");
-	return (0);
 }
 
 static time_t	get_time(t_flist *fnode, t_options *op)
@@ -67,9 +91,9 @@ static time_t	get_time(t_flist *fnode, t_options *op)
 	if ((op->options & MASK_TIME) == O_MTIME)
 		return (fnode->stat->st_mtime);
 	/*else if ((op->options & MASK_TIME) == O_ATIME)*/
-		/*return (fnode->stat->st_atime);*/
+	/*return (fnode->stat->st_atime);*/
 	/*else if ((op->options & MASK_TIME) == O_CTIME)*/
-		/*return (fnode->stat->st_ctime);*/
+	/*return (fnode->stat->st_ctime);*/
 	return (fnode->stat->st_mtime); // default
 }
 
@@ -93,64 +117,44 @@ static void	output_date(time_t format_time)
 #endif
 	ft_memcpy(datebuf + 6, " ", 1);
 	if (ft_labs(format_time - time(NULL)) > SECS_IN_6_MONTHS)
-	{
 		ft_strncat(datebuf, unformatted_date + 19, 5); // Changed from + 20, 4 to accommodate preceding space
-	}
 	else
-	{
 		ft_strncat(datebuf, unformatted_date + 11, 5);
-	}
 	ft_printf("%s", datebuf);
 }
 
-static void	init_lform(t_flist *fnode)
+static void	print_longform(t_flist *flist, t_options *op)
 {
-	t_longform	*lform;
+	t_fwidths	fwidths;
 
-	lform = (t_longform *)malloc(sizeof(t_longform));
-	if (!lform)
-		ls_error("Long format allocation failed");
-	flist->lform = lform;
-}
-
-static void	iterate_flist(t_flist *flist, void (*f)(t_flist *))
-{
+	get_unique_forms(flist);
+	get_common_widths(&fwidths, flist);
+	/*print_total_size();*/
 	while (flist)
 	{
-		f(flist);
+		ft_printf("%-*s ", PERMS_FW, "----------"); //FIXME after ft_printf supports *
+		ft_printf("%*u ", fwidths.links_len, flist->stat->st_nlink); //FIXME after ft_printf supports *
+		ft_printf("%*s  ", fwidths.author_len, flist->lform->author); //FIXME after ft_printf supports *
+		ft_printf("%*s  ", fwidths.group_len, flist->lform->group); //FIXME after ft_printf supports *
+		ft_printf("%*u ", fwidths.size_len, flist->stat->st_size); //FIXME after ft_printf supports *
+		output_date(get_time(flist, op));
+		ft_printf(" %s", flist->filename); //FIXME after ft_printf supports *
+		/*ft_printf();*/ // For symlinks
+		ft_printf("\n");
 		flist = flist->next;
 	}
 }
 
 void	format(t_options *op, t_flist *flist)
 {
-	t_longform	fwidths;
-
-	get_common_format(&fwidths, flist);
-	while (flist)
+	if (op->options & O_LONG)
 	{
-		if (op->options & O_LONG) // TODO 6 mo mtime diff -> ctime then - ctime (secs) now to monts
-		{
-			/*ft_printf("Do long boi stuff\n"); //FIXME REMOVEME*/
-			if (get_unique_format(&fwidths, flist) == -1)
-				break ; // TODO Check this
-			printf("%-*s ", PERMS_FW, "----------"); //FIXME after ft_printf supports *
-			printf("%*u ", (int)fwidths.hardlinks, flist->stat->st_nlink); //FIXME after ft_printf supports *
-			printf("%*s  ", (int)ft_strlen(fwidths.author), fwidths.author); //FIXME after ft_printf supports *
-			printf("%*s  ", (int)ft_strlen(fwidths.group), fwidths.group); //FIXME after ft_printf supports *
-			output_date(get_time(flist, op));
-			/*write(1, date, DATE_FW);*/
-			/*printf("%*s ", DATE_FW, ctime(&time)); //FIXME after ft_printf supports * AND conditions if O_mtime != default*/
-			printf("%s", flist->filename); //FIXME after ft_printf supports *
-			/*printf();*/ // For symlink
-			printf("\n");
-		}
-		else
-		{
-			/*ft_printf("No long boi stuff\n");*/
-			/*column_format();*/
-			ft_printf("%s\n", flist->filename);
-		}
-		flist = flist->next;
+		print_longform(flist, op);
+	}
+	else
+	{
+		/*ft_printf("No long boi stuff\n");*/
+		/*column_format();*/
+		ft_printf("%s\n", flist->filename);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 01:18:59 by elehtora          #+#    #+#             */
-/*   Updated: 2022/09/25 15:07:40 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 02:26:28 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ uint16_t	set_type(const char *type)
 /* Sets flags from set "-+ #0" to the proper bits, with certain rules
  * (see: man 3 printf; flags) in case of overlaps.
  */
-void	set_flags(const char *init, const char *delim, t_fstring *fs)
+const char	*set_flags(const char *init, t_fstring *fs)
 {
-	const char	*flagset = ft_strgetset(init, FLAGS, "", delim - init);
+	const size_t	n_flags = ft_strspn(init, FLAGS);
+	const char		*flagset = ft_strgetset(init, FLAGS, "", n_flags);
 
 	if (!flagset)
-		return ;
+		return (init);
 	if (ft_strchr(flagset, '#'))
 		fs->format ^= F_ALT_FORM;
 	if (ft_strchr(flagset, '-'))
@@ -67,6 +68,7 @@ void	set_flags(const char *init, const char *delim, t_fstring *fs)
 	if (ft_strchr(flagset, ' ') && !(fs->format & F_FORCE_SIGN))
 		fs->format ^= F_SPACE_SIGN;
 	free((char *)flagset);
+	return (init + n_flags);
 }
 
 /* Sets the maximum field width of a format string, limited by INT_MAX.
@@ -74,48 +76,60 @@ void	set_flags(const char *init, const char *delim, t_fstring *fs)
  * Returns a pointer to the character after the last digit of the field width
  * string.
  */
-const char	*set_field_width(const char *init, const char *delim, t_fstring *fs)
+const char	*set_field_width(const char *init, t_fstring *fs)
 {
 	const char	*iterator = ft_strpbrk(init, FWIDTH_DIGITS);
 	char		buf[FWIDTH_MAXCHARS];
-	uint8_t		i;
+	int			i;
 
-	if (!iterator || iterator >= delim)
-		return ((char *)delim);
-	ft_bzero(&buf[0], FWIDTH_MAXCHARS);
-	i = 0;
-	while (ft_isdigit(*iterator) && iterator != delim)
-		buf[i++] = *iterator++;
-	if (buf[0] != 0)
-		fs->field_width = ft_atoi(&buf[0]);
-	return ((char *)iterator - i);
+	if (!iterator || ft_strspn(init, FWIDTH_DIGITS) == 0)
+		return ((char *)init);
+	if (*iterator == '*')
+	{
+		i = va_arg(*fs->ap, int);
+		if (i < 0)
+			fs->format |= F_LEFT_ALIGN;
+		fs->field_width = (int)ft_labs((long)i);
+	}
+	else
+	{
+		ft_bzero(&buf[0], FWIDTH_MAXCHARS);
+		i = 0;
+		while (ft_isdigit(*iterator))
+			buf[i++] = *iterator++;
+		if (buf[0] != 0)
+			fs->field_width = ft_atoi(&buf[0]);
+	}
+	return ((char *)iterator);
 }
 
 /* Sets the precision for a format string.
  * Returns a pointer to the precision specifying dot before the first digit.
  */
-const char	*set_precision(const char *init, const char *delim, t_fstring *fs)
+const char	*set_precision(const char *init, t_fstring *fs)
 {
-	char		*dot;
+	const char	*dot = ft_memchr(init, '.', fs->type - init);
 	char		precision_str[PRECISION_BUF_SIZE];
-	uint32_t	precision_val;
-	uint8_t		i;
+	int			i;
 
-	dot = ft_memchr(init, '.', delim - init);
 	if (!dot || *(dot + 1) == '-')
-		return ((char *)delim);
+		return ((char *)init);
+	if (ft_memchr(dot, '*', fs->type - dot))
+	{
+		i = va_arg(*fs->ap, int);
+		if (i < 0)
+			return (dot);
+		fs->precision = i;
+		fs->format ^= EXPL_PRECISION;
+		return (dot);
+	}
 	fs->format ^= EXPL_PRECISION;
 	ft_bzero(&precision_str[0], PRECISION_BUF_SIZE);
-	i = 1;
-	while (ft_isdigit(dot[i]) && i < PRECISION_BUF_SIZE)
-	{
+	i = 0;
+	while (ft_isdigit(dot[++i]) && i < PRECISION_BUF_SIZE)
 		precision_str[i - 1] = dot[i];
-		i++;
-	}
-	precision_val = ft_atoi(&precision_str[0]);
-	if (precision_val < MAX_PRECISION)
-		fs->precision = precision_val;
-	return (dot);
+	fs->precision = ft_atoi(&precision_str[0]);
+	return (dot + i);
 }
 
 /* Seeks and sets the length modifiers hh, h, l, ll and L; char, short,
@@ -123,13 +137,12 @@ const char	*set_precision(const char *init, const char *delim, t_fstring *fs)
  * Returns a pointer to the first modifier character, or NULL,
  * if no length modifer was found.
  */
-const char	*set_length_modifier(const char *init, \
-		const char *delim, t_fstring *fs)
+void	set_length_modifier(const char *init, t_fstring *fs)
 {
 	const char	*mod = ft_strpbrk(init, LENMODS);
 
-	if (!mod || !(mod + 1 == delim || mod + 2 == delim))
-		return (delim);
+	if (!mod || !(mod + 1 == fs->type || mod + 2 == fs->type))
+		return ;
 	if (mod[0] == 'h')
 	{
 		if (mod[1] == 'h')
@@ -146,5 +159,4 @@ const char	*set_length_modifier(const char *init, \
 	}
 	else if (mod[0] == 'L')
 		fs->format |= M_DLONG;
-	return (mod);
 }

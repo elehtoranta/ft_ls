@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 17:00:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/09/25 17:48:16 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 00:44:27 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@
 # define MAX_PRECISION 2147483647 // INT_MAX
 
 // Delimiter string constants for parsing the format string
-# define FWIDTH_DIGITS "123456789"
-# define ALL_FCHARS "#0- + 123456789.lhLdiouxXfcsp%"
+# define FWIDTH_DIGITS "123456789*"
+# define ALL_FCHARS "#0- + 123456789.lhLdiouxXfcsp%*"
 
 // A conversion specification has format values at least at the bit area that
 // is appointed to holding the (mandatory) conversion specifier.
@@ -88,12 +88,10 @@ int			ft_printf(const char *format, ...);
 
 // Format string parsers and data collectors
 uint16_t	set_type(const char *type);
-void		set_flags(const char *init, const char *delim, t_fstring *fs);
-const char	*set_field_width(const char *init, \
-		const char *delim, t_fstring *fs);
-const char	*set_precision(const char *init, const char *delim, t_fstring *fs);
-const char	*set_length_modifier(const char *init, \
-		const char *delim, t_fstring *fs);
+const char	*set_flags(const char *init, t_fstring *fs);
+const char	*set_field_width(const char *init, t_fstring *fs);
+const char	*set_precision(const char *init, t_fstring *fs);
+void		set_length_modifier(const char *init, t_fstring *fs);
 
 // Conversion handlers
 void		convert_signed_int(t_fstring *fs, va_list *ap);

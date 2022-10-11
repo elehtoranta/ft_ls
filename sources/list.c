@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:40:58 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/06 02:45:59 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 03:23:36 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_flist	*init_fnode(void)
 	flist->stat = NULL;
 	flist->filename = NULL;
 	flist->cmp_name = NULL;
+	flist->lform = NULL;
 	flist->next = NULL;
 	return (flist);
 }
@@ -75,6 +76,11 @@ void	pop_flist(t_flist **head)
 		free((*head)->stat);
 		free((*head)->filename);
 		free((*head)->cmp_name);
+		if ((*head)->lform)
+		{
+			free((*head)->lform->author);
+			free((*head)->lform->group);
+		}
 		free(*head);
 		*head = new_head;
 	}
