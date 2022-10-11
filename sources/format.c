@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 00:03:43 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 00:39:11 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,8 @@ static void	print_longform(t_flist *flist, t_options *op, const char *path)
 	/*print_total_size();*/ // TODO count blocks and their sizes from stats
 	while (flist)
 	{
-		ft_printf("%-*s ", PERMS_FW, "----------"); //FIXME after ft_printf supports *
+		print_permissions(flist);
+		/*ft_printf("%-*s ", PERMS_FW, "----------"); //FIXME after ft_printf supports **/
 		ft_printf("%*u ", fwidths.links_len, flist->stat->st_nlink); //FIXME after ft_printf supports *
 		ft_printf("%*s  ", fwidths.author_len, flist->lform->author); //FIXME after ft_printf supports *
 		ft_printf("%*s  ", fwidths.group_len, flist->lform->group); //FIXME after ft_printf supports *

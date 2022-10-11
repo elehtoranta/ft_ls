@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/11 23:59:52 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/12 00:35:15 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ SRCS	:= main.c \
 		   sort.c \
 		   list.c \
 		   format.c \
-		   error.c
+		   error.c \
+		   permissions.c
 
 OBJDIR	:= objects
 OBJS	:= $(SRCS:.c=.o)
