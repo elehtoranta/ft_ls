@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/11 03:25:11 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 17:15:03 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,33 @@ static void	add_stat(t_flist *fnode, const char *dir)
 	path = ft_strdjoin(dir, "/", fnode->filename);
 	if (!path)
 		ls_error("Path allocation failed");
-#ifdef DEBUG
-	ft_printf("Path: %s\n", path);
-#endif
 	if (lstat(path, &stat) == -1)
 		ls_error("Lstat failed");
 	fnode->stat = (t_stat *)malloc(sizeof(stat));
 	if (!fnode->stat && errno == ENOMEM)
 		ls_error("Stat allocation failed");
 	ft_memcpy(fnode->stat, &stat, sizeof(stat));
-#ifdef DEBUG
-	ft_printf("Allocated stat size data: %lu\n", fnode->stat->st_size);
-	ft_printf("Allocated stat creation time: %s\n", ctime(&fnode->stat->st_mtime));
-#endif
 	free(path);
+}
+
+static t_flist	*get_fnode(t_options *op, char *filename, const char *path)
+{
+	t_flist	*fnode;
+
+	if (!filename)
+		ls_error("Invalid filename in get_fnode()");
+	fnode = init_fnode();
+	if (!fnode)
+		ls_error("Initializing file node failed");
+	fnode->filename = ft_strdup(filename);
+	if (!fnode->filename)
+		ls_error("Allocating memory to file name failed");
+	if (op->options & (O_LONG | MASK_SORT | O_REC))
+		add_stat(fnode, path);
+	fnode->cmp_name = lex_strip(filename);
+	if (errno == ENOMEM)
+		ls_error("File name allocation failed");
+	return (fnode);
 }
 
 static t_flist	*collect_flist(t_flist **head, DIR *dirp, const char *path, t_options *op)
@@ -79,35 +92,13 @@ static t_flist	*collect_flist(t_flist **head, DIR *dirp, const char *path, t_opt
 			ls_error("Reading directory stream failed");
 		if (!dirent)
 			return (*head);
-		fnode = init_fnode();
-		if (!fnode)
-			ls_error("Initializing file node failed");
+		fnode = get_fnode(op, dirent->d_name, path);
 		if (*head == NULL)
 			*head = fnode;
-		fnode->filename = ft_strdup(dirent->d_name);
-		if (!fnode->filename)
-			ls_error("Allocating memory to file name failed");
-		if (op->options & (O_LONG | MASK_SORT | O_REC))
-			add_stat(fnode, path);
 		last = append_flist(&last, fnode);
-#ifdef DEBUG
-		ft_printf("head name: %s\n", (*head)->filename);
-#endif
-		fnode->cmp_name = lex_strip((*head)->filename);
-		if (errno == ENOMEM)
-			ls_error("File name allocation failed");
 	}
 	return (*head);
 }
-
-/*static void	test_output(t_flist *flist)*/
-/*{*/
-	/*while (flist)*/
-	/*{*/
-		/*ft_printf("%s\n", flist->filename); // TODO replace with real formatting*/
-		/*flist = flist->next;*/
-	/*}*/
-/*}*/
 
 static void	recurse_directories(t_options *op, char *path, t_flist *flist)
 {
@@ -118,7 +109,7 @@ static void	recurse_directories(t_options *op, char *path, t_flist *flist)
 	{
 		if ((flist->stat->st_mode & S_IFMT) == S_IFDIR // TODO Add permission mode checks
 				&& !(ft_strequ(flist->filename, ".")
-				|| ft_strequ(flist->filename, "..")))
+					|| ft_strequ(flist->filename, "..")))
 		{
 			dirpath = ft_strdjoin(path, "/", flist->filename);
 			if (!dirpath)
@@ -154,13 +145,26 @@ void	list_dir(t_options *op, char *path)
 		ls_error("Closing directory stream failed");
 }
 
-/*static void	list_file(t_options *op, char *path)*/
-/*{*/
-	/*t_flist	*flist;*/
+static void	list_file(t_options *op, char *path)
+{
+	t_flist	*fnode;
+	char	*cond_filename = ft_strrchr(path, '/');
 
-	/*flist = NULL;*/
-	/*[>collect_flist;<]*/
-/*}*/
+	if (cond_filename != NULL)
+	{
+		// Separate the path to filename and base by effectively splitting them.
+		// 'path' still points to the allocated section, so it can be freed.
+		*cond_filename = '\0';
+		cond_filename += 1;
+		fnode = get_fnode(op, cond_filename, path);
+	}
+	else
+	{
+		fnode = get_fnode(op, path, ".");
+	}
+	format(op, fnode);
+	delete_flist(&fnode);
+}
 
 void	list(t_options *op, char *path)
 {
@@ -174,15 +178,13 @@ void	list(t_options *op, char *path)
 	}
 	else
 	{
-		/*format(op, );*/
-		/*output();*/
-		ft_printf("Yes.\n"); //FIXME placeholder
+		list_file(op, path);
 	}
 	free(path);
 }
 
 /* Iterate through file arguments
- */
+*/
 void	list_args(t_options *op, char **argv, int argc)
 {
 	char	*path;

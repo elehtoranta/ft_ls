@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/11 03:43:58 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 04:03:49 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,8 +153,11 @@ void	format(t_options *op, t_flist *flist)
 	}
 	else
 	{
-		/*ft_printf("No long boi stuff\n");*/
-		/*column_format();*/
-		ft_printf("%s\n", flist->filename);
+		/*column_format();*/ // Bonus
+		while (flist)
+		{
+			ft_printf("%s\n", flist->filename);
+			flist = flist->next;
+		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:40:58 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/11 03:23:36 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 03:50:57 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	pop_flist(t_flist **head)
 		{
 			free((*head)->lform->author);
 			free((*head)->lform->group);
+			free((*head)->lform);
 		}
 		free(*head);
 		*head = new_head;
