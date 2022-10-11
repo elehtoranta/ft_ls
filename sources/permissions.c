@@ -6,11 +6,42 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 03:53:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 01:21:30 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 01:57:14 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+/* Handles the special cases concerning the execution/search permissions of
+ * a given entry, caused by the additional permission layer of set_*_IDs and
+ * sticky bits. Overwrites the previously set 'x' if 's' applies.
+ */
+static void	reset_exec_permissions(t_flist *fnode, char *buf)
+{
+	const mode_t	mode = fnode->stat->st_mode;
+
+	if (mode & S_ISUID)
+	{
+		if (!(mode & S_IXUSR))
+			buf[2] = 'S';
+		else
+			buf[2] = 's';
+	}
+	if (mode & S_ISGID)
+	{
+		if (!(mode & S_IXGRP))
+			buf[5] = 'S';
+		else
+			buf[5] = 's';
+	}
+	if (mode & S_ISVTX)
+	{
+		if (!(mode & S_IXOTH))
+			buf[8] = 'T';
+		else
+			buf[8] = 't';
+	}
+}
 
 #define PERM_CHARS_LEN 9
 /* Set user, group and world permission chars (hence 'ugw').
@@ -29,6 +60,8 @@ static void	set_ugw(t_flist *fnode, char *buf)
 			buf[i] = perm_char_mask[i];
 		i++;
 	}
+	if (fnode->stat->st_mode & (S_ISUID | S_ISGID | S_ISVTX))
+		reset_exec_permissions(fnode, buf);
 }
 
 /* Set the first character of the permission string, denoting file type.
