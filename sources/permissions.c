@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 03:53:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 01:15:40 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 01:21:30 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,9 @@
  */
 static void	set_ugw(t_flist *fnode, char *buf)
 {
-	/*ft_printf("%o", fnode->stat->st_mode);*/
 	static const char	*perm_char_mask = "rwxrwxrwx";
-	uint8_t	bit;
-	uint8_t	i;
+	uint8_t				bit;
+	uint8_t				i;
 
 	bit = PERM_CHARS_LEN;
 	i = 0;
@@ -58,7 +57,6 @@ void	print_permissions(t_flist *fnode)
 {
 	char	permission_buf[PERMS_FW + 1];
 
-	// Set default state "---------- "
 	ft_memset(permission_buf, '-', PERMS_FW - 1);
 	permission_buf[PERMS_FW - 1] = ' ';
 	permission_buf[PERMS_FW] = '\0';
@@ -66,4 +64,3 @@ void	print_permissions(t_flist *fnode)
 	set_ugw(fnode, permission_buf + 1);
 	ft_printf("%s ", permission_buf);
 }
-
