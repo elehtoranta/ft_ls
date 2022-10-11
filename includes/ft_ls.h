@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 00:39:23 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 01:01:04 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,12 @@ void		sort(t_options *op, t_flist **head);
 // Output formatter
 void		format(t_options *op, t_flist *flist, const char *path);
 
-// Permission handler
+// Definitions for st_mode bitmasking
+# define P_USER_MASK	0b111 // Can binary literals be used per 42 dogma?
+# define P_GROUP_MASK	0b111000
+# define P_WORLD_MASK	0b111000000
 # define LS_PERMISSIONS 7
+// Permission handler
 void		print_permissions(t_flist *fnode);
 
 // Error functions
