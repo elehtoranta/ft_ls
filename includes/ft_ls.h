@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/11 03:37:23 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 23:29:24 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,6 @@ typedef int	sorter(t_flist *first, t_flist *second);
 void		sort(t_options *op, t_flist **head);
 
 // Output formatter
-void		format(t_options *op, t_flist *flist);
+void		format(t_options *op, t_flist *flist, const char *path);
 
 # endif

@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/11 04:03:49 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 23:48:23 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,13 +123,34 @@ static void	output_date(time_t format_time)
 	ft_printf("%s", datebuf);
 }
 
-static void	print_longform(t_flist *flist, t_options *op)
+#define READLINK_BUFSIZE 1024
+static void	resolve_link(t_flist *fnode, const char *base)
+{
+	ssize_t	ret;
+	char	*path;
+	char	buf[READLINK_BUFSIZE];
+
+	path = ft_strdjoin(base, "/", fnode->filename);
+	if (!path)
+		ls_error("Path allocation failed");
+	ft_bzero(buf, READLINK_BUFSIZE);
+	ret = readlink(path, buf, READLINK_BUFSIZE);
+	free(path);
+	if (ret == -1)
+	{
+		perror("\nft_ls: could not resolve link");
+		return ;
+	}
+	ft_printf(" -> %s", buf);
+}
+
+static void	print_longform(t_flist *flist, t_options *op, const char *path)
 {
 	t_fwidths	fwidths;
 
 	get_unique_forms(flist);
 	get_common_widths(&fwidths, flist);
-	/*print_total_size();*/
+	/*print_total_size();*/ // TODO count blocks and their sizes from stats
 	while (flist)
 	{
 		ft_printf("%-*s ", PERMS_FW, "----------"); //FIXME after ft_printf supports *
@@ -139,17 +160,18 @@ static void	print_longform(t_flist *flist, t_options *op)
 		ft_printf("%*u ", fwidths.size_len, flist->stat->st_size); //FIXME after ft_printf supports *
 		output_date(get_time(flist, op));
 		ft_printf(" %s", flist->filename); //FIXME after ft_printf supports *
-		/*ft_printf();*/ // For symlinks
+		if ((flist->stat->st_mode & S_IFMT) == S_IFLNK)
+			resolve_link(flist, path);
 		ft_printf("\n");
 		flist = flist->next;
 	}
 }
 
-void	format(t_options *op, t_flist *flist)
+void	format(t_options *op, t_flist *flist, const char *path)
 {
 	if (op->options & O_LONG)
 	{
-		print_longform(flist, op);
+		print_longform(flist, op, path);
 	}
 	else
 	{

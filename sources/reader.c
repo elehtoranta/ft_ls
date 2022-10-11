@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/11 17:15:03 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 23:29:53 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void	list_dir(t_options *op, char *path)
 	if (!collect_flist(&flist, dirp, path, op))
 		ls_error("File list initialization failed");
 	sort(op, &flist);
-	format(op, flist);
+	format(op, flist, (const char *)path);
 	if (op->options & O_REC)
 		recurse_directories(op, path, flist);
 	delete_flist(&flist);
@@ -162,7 +162,7 @@ static void	list_file(t_options *op, char *path)
 	{
 		fnode = get_fnode(op, path, ".");
 	}
-	format(op, fnode);
+	format(op, fnode, (const char *)path);
 	delete_flist(&fnode);
 }
 
