@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/11 23:29:24 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/11 23:59:48 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,8 @@ void		sort(t_options *op, t_flist **head);
 
 // Output formatter
 void		format(t_options *op, t_flist *flist, const char *path);
+
+// Error functions
+void		ls_read_error(const char *message, const char *path);
 
 # endif

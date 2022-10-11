@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/11 23:48:23 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 00:03:43 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,13 @@ static void	resolve_link(t_flist *fnode, const char *base)
 		ls_error("Path allocation failed");
 	ft_bzero(buf, READLINK_BUFSIZE);
 	ret = readlink(path, buf, READLINK_BUFSIZE);
-	free(path);
 	if (ret == -1)
 	{
-		perror("\nft_ls: could not resolve link");
+		ls_read_error("", path);
+		free(path);
 		return ;
 	}
+	free(path);
 	ft_printf(" -> %s", buf);
 }
 
