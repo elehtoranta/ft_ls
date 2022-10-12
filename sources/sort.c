@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:59:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 07:26:05 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 07:31:04 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ t_flist	*reverse_flist(t_flist *flist, t_flist *head)
 		next = next_over;
 		next_over = next->next;
 	}
-	return (flist);
+	next->next = flist;
+	return (next);
 }
 
 /* Compare strings. Comparison is made either with the formatted strings
