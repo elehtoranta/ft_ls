@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 06:21:22 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 08:28:57 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	get_common_widths(t_fwidths *fwidths, t_flist *flist)
 	fwidths->author_len = 0;
 	fwidths->group_len = 0;
 	fwidths->size_len = 0;
+	fwidths->total_blocks = 0;
 	while (flist)
 	{
 		if (flist->stat != NULL)
@@ -33,6 +34,7 @@ static void	get_common_widths(t_fwidths *fwidths, t_flist *flist)
 				fwidths->group_len = ft_strlen(flist->lform->group);
 			if (ft_count_digs(flist->stat->st_size) > fwidths->size_len)
 				fwidths->size_len = ft_count_digs(flist->stat->st_size);
+			fwidths->total_blocks += flist->stat->st_blocks;
 		}
 		flist = flist->next;
 	}
@@ -143,7 +145,7 @@ static void	print_longform(t_flist *flist, t_options *op, const char *path)
 	t_fwidths	fwidths;
 
 	get_common_widths(&fwidths, flist);
-	/*print_total_size();*/ // TODO count blocks and their sizes from stats
+	ft_printf("total %lu\n", fwidths.total_blocks);
 	while (flist)
 	{
 		if (flist->stat != NULL)

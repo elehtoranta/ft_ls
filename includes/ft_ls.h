@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 07:34:56 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 08:28:28 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct		s_longform
 
 typedef struct		s_fwidths
 {
+	size_t			total_blocks;
 	uint16_t		links_len;
 	uint16_t		author_len;
 	uint16_t		group_len;
