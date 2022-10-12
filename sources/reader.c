@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/11 23:29:53 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 04:02:48 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,12 @@ static void	add_stat(t_flist *fnode, const char *dir)
 	if (!path)
 		ls_error("Path allocation failed");
 	if (lstat(path, &stat) == -1)
-		ls_error("Lstat failed");
+	{
+		ls_read_error("", fnode->filename);
+		fnode->stat = NULL;
+		free(path);
+		return ;
+	}
 	fnode->stat = (t_stat *)malloc(sizeof(stat));
 	if (!fnode->stat && errno == ENOMEM)
 		ls_error("Stat allocation failed");
@@ -70,11 +75,11 @@ static t_flist	*get_fnode(t_options *op, char *filename, const char *path)
 	fnode->filename = ft_strdup(filename);
 	if (!fnode->filename)
 		ls_error("Allocating memory to file name failed");
-	if (op->options & (O_LONG | MASK_SORT | O_REC))
-		add_stat(fnode, path);
 	fnode->cmp_name = lex_strip(filename);
 	if (errno == ENOMEM)
 		ls_error("File name allocation failed");
+	if (op->options & (O_LONG | MASK_SORT | O_REC))
+		add_stat(fnode, path);
 	return (fnode);
 }
 
@@ -107,7 +112,8 @@ static void	recurse_directories(t_options *op, char *path, t_flist *flist)
 	dirpath = NULL;
 	while (flist)
 	{
-		if ((flist->stat->st_mode & S_IFMT) == S_IFDIR // TODO Add permission mode checks
+		if (flist->stat != NULL
+				&& (flist->stat->st_mode & S_IFMT) == S_IFDIR // TODO Add permission mode checks
 				&& !(ft_strequ(flist->filename, ".")
 					|| ft_strequ(flist->filename, "..")))
 		{
@@ -130,8 +136,7 @@ void	list_dir(t_options *op, char *path)
 	dirp = opendir(path);
 	if (!dirp)
 	{
-		ft_printf("ft_ls: cannot access '%s': ", path);
-		perror("");
+		ls_read_error("", path);
 		return ;
 	}
 	if (!collect_flist(&flist, dirp, path, op))
@@ -174,7 +179,8 @@ void	list(t_options *op, char *path)
 		ls_error("stat error");
 	if ((stat.st_mode & S_IFMT) == S_IFDIR)
 	{
-		list_dir(op, path);
+		if (stat.st_mode & S_IXUSR)
+			list_dir(op, path);
 	}
 	else
 	{

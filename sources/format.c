@@ -6,16 +6,11 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 00:39:11 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 04:26:10 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-/*static char	*get_permission_string()*/
-/*{*/
-
-/*}*/
 
 /* Gets the common attributes for the long format, so that the field widths
  * can be aligned correctly.
@@ -28,22 +23,20 @@ static void	get_common_widths(t_fwidths *fwidths, t_flist *flist)
 	fwidths->size_len = 0;
 	while (flist)
 	{
-		if (ft_count_digs(flist->stat->st_nlink) > fwidths->links_len)
-			fwidths->links_len = ft_count_digs(flist->stat->st_nlink);
-		if (ft_strlen(flist->lform->author) > fwidths->author_len)
-			fwidths->author_len = ft_strlen(flist->lform->author);
-		if (ft_strlen(flist->lform->group) > fwidths->group_len)
-			fwidths->group_len = ft_strlen(flist->lform->group);
-		if (ft_count_digs(flist->stat->st_size) > fwidths->size_len)
-			fwidths->size_len = ft_count_digs(flist->stat->st_size);
+		if (flist->stat != NULL)
+		{
+			if (ft_count_digs(flist->stat->st_nlink) > fwidths->links_len)
+				fwidths->links_len = ft_count_digs(flist->stat->st_nlink);
+			if (ft_strlen(flist->lform->author) > fwidths->author_len)
+				fwidths->author_len = ft_strlen(flist->lform->author);
+			if (ft_strlen(flist->lform->group) > fwidths->group_len)
+				fwidths->group_len = ft_strlen(flist->lform->group);
+			if (ft_count_digs(flist->stat->st_size) > fwidths->size_len)
+				fwidths->size_len = ft_count_digs(flist->stat->st_size);
+		}
 		flist = flist->next;
 	}
 }
-
-/*static void	get_id_info()*/
-/*{*/
-
-/*}*/
 
 static t_longform	*init_lform(void)
 {
@@ -69,19 +62,20 @@ static void	get_unique_forms(t_flist *fnode)
 	lform = NULL;
 	while (fnode)
 	{
-		lform = init_lform();
-		passwd = getpwuid(fnode->stat->st_uid);
-		group = getgrgid(fnode->stat->st_gid);
-		if (!passwd || !group)
+		if (fnode->stat != NULL)
 		{
-			perror("UID or GID data not found");
-			return ;
+			lform = init_lform();
+			passwd = getpwuid(fnode->stat->st_uid);
+			group = getgrgid(fnode->stat->st_gid);
+			if (!passwd) // No match, display UID
+				lform->author = ft_itoa(fnode->stat->st_uid);
+			else
+				lform->author = ft_strdup(passwd->pw_name);
+			lform->group = ft_strdup(group->gr_name);
+			if (!lform->author || !lform->group)
+				ls_error("Allocation of author or group strings failed");
+			fnode->lform = lform;
 		}
-		lform->author = ft_strdup(passwd->pw_name);
-		lform->group = ft_strdup(group->gr_name);
-		if (!lform->author || !lform->group)
-			ls_error("Allocation of author or group strings failed");
-		fnode->lform = lform;
 		fnode = fnode->next;
 	}
 }
@@ -112,9 +106,6 @@ static void	output_date(time_t format_time)
 
 	ft_bzero(datebuf, DATE_FW);
 	ft_memcpy(datebuf, unformatted_date + 4, 6); // Month + Day
-#ifdef DEBUG
-	ft_printf("Mmm + [d]d: %s\n", datebuf); // FIXME debug
-#endif
 	ft_memcpy(datebuf + 6, " ", 1);
 	if (ft_labs(format_time - time(NULL)) > SECS_IN_6_MONTHS)
 		ft_strncat(datebuf, unformatted_date + 19, 5); // Changed from + 20, 4 to accommodate preceding space
@@ -137,7 +128,7 @@ static void	resolve_link(t_flist *fnode, const char *base)
 	ret = readlink(path, buf, READLINK_BUFSIZE);
 	if (ret == -1)
 	{
-		ls_read_error("", path);
+		ls_read_error("", fnode->filename);
 		free(path);
 		return ;
 	}
@@ -154,17 +145,19 @@ static void	print_longform(t_flist *flist, t_options *op, const char *path)
 	/*print_total_size();*/ // TODO count blocks and their sizes from stats
 	while (flist)
 	{
-		print_permissions(flist);
-		/*ft_printf("%-*s ", PERMS_FW, "----------"); //FIXME after ft_printf supports **/
-		ft_printf("%*u ", fwidths.links_len, flist->stat->st_nlink); //FIXME after ft_printf supports *
-		ft_printf("%*s  ", fwidths.author_len, flist->lform->author); //FIXME after ft_printf supports *
-		ft_printf("%*s  ", fwidths.group_len, flist->lform->group); //FIXME after ft_printf supports *
-		ft_printf("%*u ", fwidths.size_len, flist->stat->st_size); //FIXME after ft_printf supports *
-		output_date(get_time(flist, op));
-		ft_printf(" %s", flist->filename); //FIXME after ft_printf supports *
-		if ((flist->stat->st_mode & S_IFMT) == S_IFLNK)
-			resolve_link(flist, path);
-		ft_printf("\n");
+		if (flist->stat != NULL)
+		{
+			print_permissions(flist);
+			ft_printf("%*u ", fwidths.links_len, flist->stat->st_nlink);
+			ft_printf("%*s  ", fwidths.author_len, flist->lform->author);
+			ft_printf("%*s  ", fwidths.group_len, flist->lform->group);
+			ft_printf("%*u ", fwidths.size_len, flist->stat->st_size);
+			output_date(get_time(flist, op));
+			ft_printf(" %s", flist->filename);
+			if ((flist->stat->st_mode & S_IFMT) == S_IFLNK)
+				resolve_link(flist, path);
+			ft_printf("\n");
+		}
 		flist = flist->next;
 	}
 }
