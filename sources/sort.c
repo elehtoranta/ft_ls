@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:59:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 07:31:04 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 07:36:13 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ t_flist	*reverse_flist(t_flist *flist, t_flist *head)
 	return (next);
 }
 
-/* Compare strings. Comparison is made either with the formatted strings
- * (cmp_name) or the 'pure' argument names (filename)
+/* Lexicographical comparison. Default mode of sorting.
  */
 static int	lex_cmp(t_flist *first, t_flist *second)
 {
