@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 06:21:18 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 07:19:22 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static t_flist	*get_fnode(t_options *op, char *filename, const char *path)
 		ls_error("Allocating memory to file name failed");
 	if (errno == ENOMEM)
 		ls_error("File name allocation failed");
-	if (op->options & (O_LONG | MASK_SORT | O_REC))
+	if (op->options & (O_LONG | MASK_TIME | O_REC))
 		add_stat(fnode, path);
 	return (fnode);
 }

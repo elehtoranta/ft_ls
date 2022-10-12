@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 06:17:01 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 07:27:50 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,17 @@
 # define O_REC		0x0002
 # define O_ALL		0x0004
 # define O_REV		0x0008
-# define O_MTIME	0x0100
+# define O_MTIME	0x0010
 
 // Sorting options (2 bits == 4 permutations)
-# define MASK_SORT	0x0300
+# define MASK_SORT	0x0030
 # define S_LEX		0x0000
-# define S_MTIME	0x0100
+# define S_MTIME	0x0010
 
 // Masking for time option selected. The time displayed in
 // long format can represent time modified, created or last
 // accessed.
-# define MASK_TIME	0x0300 // FIXME expanded upon adding time options
+# define MASK_TIME	0x0010 // For future expansion
 
 // Aliasing to reduce typing 'struct' every time on use
 typedef struct stat		t_stat;

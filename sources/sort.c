@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:59:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 06:13:19 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 07:26:05 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,11 @@ static int	lex_cmp(t_flist *first, t_flist *second)
 
 static int	mtime_cmp(t_flist *first, t_flist *second)
 {
-	// TODO placeholder: compare with data from t_stat
-	(void)first;
-	(void)second;
-	return (0); // FIXME
+	const int	diff = second->stat->st_mtime - first->stat->st_mtime;
+	if (diff == 0)
+		return (ft_strcmp(first->filename, second->filename));
+	else
+		return (diff);
 }
 
 /* Swaps places of two items in a flist linked list.
@@ -80,7 +81,7 @@ void	sort(t_options *op, t_flist **head)
 	prev = *head;
 	while (flist->next)
 	{
-		if (compare[(op->options & MASK_SORT) >> 8](flist, flist->next) > 0)
+		if (compare[(op->options & MASK_SORT) >> 4](flist, flist->next) > 0)
 		{
 			swap_items(&flist, head, &prev);
 			flist = *head;
