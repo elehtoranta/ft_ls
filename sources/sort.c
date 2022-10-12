@@ -6,12 +6,36 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:59:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/06 02:44:30 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 05:37:26 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #define N_SORTF 2
+
+/* Reverses the given list 'flist' (by reversing the direction of pointers)
+ * and returns the new head. Used with -r flag.
+ */
+t_flist	*reverse_flist(t_flist *flist, t_flist *head)
+{
+	t_flist	*next;
+	t_flist	*next_over;
+
+	if (!flist->next) // single element
+		return (flist);
+	next = flist->next;
+	next_over = next->next;
+	while (next_over)
+	{
+		if (flist == head)
+			flist->next = NULL;
+		next->next = flist;
+		flist = next;
+		next = next_over;
+		next_over = next->next;
+	}
+	return (flist);
+}
 
 /* Compare strings. Comparison is made either with the formatted strings
  * (cmp_name) or the 'pure' argument names (filename)

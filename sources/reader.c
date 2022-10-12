@@ -6,40 +6,11 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 04:02:48 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 05:36:18 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-/*#define DEBUG*/
-// H4CK3RM4N5
-static void	st_tolower(char *c)
-{
-	*c = ft_tolower(*c);
-}
-
-/* Format strings ready for lexicographical comparison. '.', '..'
- * and hidden files (.*) get special treatment. The comparison is
- * also case agnostic.
- */
-static char	*lex_strip(char *str)
-{
-	char	*stripped;
-
-	stripped = NULL;
-	if (str[0] == '.' && !(ft_strequ(str, ".") || ft_strequ(str, "..")))
-		stripped = ft_strdup(str + 1);
-	else
-		return (NULL);
-	if (!stripped)
-		return (NULL);
-	ft_striter(stripped, st_tolower);
-#ifdef DEBUG
-	ft_printf("String '%s' stripped: %s\n", str, stripped);
-#endif
-	return (stripped);
-}
 
 static void	add_stat(t_flist *fnode, const char *dir)
 {
@@ -75,7 +46,6 @@ static t_flist	*get_fnode(t_options *op, char *filename, const char *path)
 	fnode->filename = ft_strdup(filename);
 	if (!fnode->filename)
 		ls_error("Allocating memory to file name failed");
-	fnode->cmp_name = lex_strip(filename);
 	if (errno == ENOMEM)
 		ls_error("File name allocation failed");
 	if (op->options & (O_LONG | MASK_SORT | O_REC))
@@ -135,13 +105,12 @@ void	list_dir(t_options *op, char *path)
 	flist = NULL;
 	dirp = opendir(path);
 	if (!dirp)
-	{
-		ls_read_error("", path);
-		return ;
-	}
+		return (ls_read_error("", path));
 	if (!collect_flist(&flist, dirp, path, op))
 		ls_error("File list initialization failed");
 	sort(op, &flist);
+	if (op->options & O_REV)
+		flist = reverse_flist(flist, flist);
 	format(op, flist, (const char *)path);
 	if (op->options & O_REC)
 		recurse_directories(op, path, flist);

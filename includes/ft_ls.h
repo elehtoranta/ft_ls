@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 01:22:48 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 05:27:47 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ void	delete_flist(t_flist **head);
 // of which some are part of ft library.
 typedef int	sorter(t_flist *first, t_flist *second);
 void		sort(t_options *op, t_flist **head);
+t_flist		*reverse_flist(t_flist *flist, t_flist *head);
 
 // Output formatter
 void		format(t_options *op, t_flist *flist, const char *path);
