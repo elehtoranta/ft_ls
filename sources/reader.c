@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 08:48:07 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 11:16:02 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,10 @@ static void	recurse_directories(t_options *op, char *path, t_flist *flist)
 				&& !(ft_strequ(flist->filename, ".")
 					|| ft_strequ(flist->filename, "..")))
 		{
-			dirpath = ft_strdjoin(path, "/", flist->filename);
+			if (ft_strequ(path, "/"))
+				dirpath = ft_strjoin(path, flist->filename);
+			else
+				dirpath = ft_strdjoin(path, "/", flist->filename);
 			if (!dirpath)
 				ls_error("Path name allocation failed");
 			ft_printf("\n%s:\n", dirpath);
@@ -169,15 +172,11 @@ void	list(t_options *op, char *path)
 */
 void	list_args(t_options *op, char **argv, int argc)
 {
-	char	*path;
-
 	// No file/directory arguments
 	if (argc == 0)
 		list(op, ft_strdup("."));
 	while (argc--)
 	{
-		path = ft_strdup(*argv);
-		list(op, path);
-		argv++;
+		list(op, ft_strdup(*argv++));
 	}
 }
