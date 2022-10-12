@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 07:19:22 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 07:47:27 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ static t_flist	*collect_flist(t_flist **head, DIR *dirp, const char *path, t_opt
 			ls_error("Reading directory stream failed");
 		if (!dirent)
 			return (*head);
+		if (dirent->d_name[0] == '.' && !(op->options & O_ALL))
+			continue ;
 		fnode = get_fnode(op, dirent->d_name, path);
 		if (*head == NULL)
 			*head = fnode;
