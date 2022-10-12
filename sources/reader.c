@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 05:36:18 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 06:21:18 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ void	list_dir(t_options *op, char *path)
 		return (ls_read_error("", path));
 	if (!collect_flist(&flist, dirp, path, op))
 		ls_error("File list initialization failed");
+	if (op->options & (O_LONG | O_MTIME))
+		get_unique_forms(flist);
 	sort(op, &flist);
 	if (op->options & O_REV)
 		flist = reverse_flist(flist, flist);

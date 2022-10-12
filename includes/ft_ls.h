@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 05:27:47 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 06:17:01 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,9 @@ t_flist	*append_flist(t_flist **last, t_flist *new);
 void	prepend_flist(t_flist **head, t_flist *new);
 void	pop_flist(t_flist **head);
 void	delete_flist(t_flist **head);
+
+// Long format information gathering
+void	get_unique_forms(t_flist *fnode);
 
 // Sorting function dispatcher. Makes use of small utility functions,
 // of which some are part of ft library.

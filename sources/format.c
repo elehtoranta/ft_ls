@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 04:36:09 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 06:21:22 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static t_longform	*init_lform(void)
 	return (lform);
 }
 
-static void	get_unique_forms(t_flist *fnode)
+void	get_unique_forms(t_flist *fnode)
 {
 	t_longform	*lform;
 	t_passwd	*passwd;
@@ -142,7 +142,6 @@ static void	print_longform(t_flist *flist, t_options *op, const char *path)
 {
 	t_fwidths	fwidths;
 
-	get_unique_forms(flist);
 	get_common_widths(&fwidths, flist);
 	/*print_total_size();*/ // TODO count blocks and their sizes from stats
 	while (flist)
