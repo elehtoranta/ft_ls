@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 08:01:16 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 08:48:07 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,8 @@ static void	list_file(t_options *op, char *path)
 	{
 		fnode = get_fnode(op, path, ".");
 	}
+	if (op->options & O_LONG)
+		get_unique_forms(fnode);
 	format(op, fnode, (const char *)path);
 	delete_flist(&fnode);
 }
