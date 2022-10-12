@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 11:16:02 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 23:23:15 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,18 +152,21 @@ static void	list_file(t_options *op, char *path)
 
 void	list(t_options *op, char *path)
 {
-	t_stat		stat;
+	t_stat	stat;
 
 	if (lstat(path, &stat) == -1)
-		ls_error("stat error");
-	if ((stat.st_mode & S_IFMT) == S_IFDIR)
-	{
-		if (stat.st_mode & S_IXUSR)
-			list_dir(op, path);
-	}
+		ls_read_error("", path);
 	else
 	{
-		list_file(op, path);
+		if ((stat.st_mode & S_IFMT) == S_IFDIR)
+		{
+			if (stat.st_mode & S_IXUSR)
+				list_dir(op, path);
+		}
+		else
+		{
+			list_file(op, path);
+		}
 	}
 	free(path);
 }
@@ -172,11 +175,8 @@ void	list(t_options *op, char *path)
 */
 void	list_args(t_options *op, char **argv, int argc)
 {
-	// No file/directory arguments
 	if (argc == 0)
 		list(op, ft_strdup("."));
 	while (argc--)
-	{
 		list(op, ft_strdup(*argv++));
-	}
 }

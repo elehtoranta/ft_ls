@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 08:28:57 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 23:07:55 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ static void	output_date(time_t format_time)
 #define READLINK_BUFSIZE 1024
 static void	resolve_link(t_flist *fnode, const char *base)
 {
-	ssize_t	ret;
 	char	*path;
 	char	buf[READLINK_BUFSIZE];
 
@@ -129,12 +128,10 @@ static void	resolve_link(t_flist *fnode, const char *base)
 	if (!path)
 		ls_error("Path allocation failed");
 	ft_bzero(buf, READLINK_BUFSIZE);
-	ret = readlink(path, buf, READLINK_BUFSIZE);
-	if (ret == -1)
+	if (readlink(path, buf, READLINK_BUFSIZE) == -1)
 	{
 		ls_read_error("", fnode->filename);
-		free(path);
-		return ;
+		return (free(path));
 	}
 	free(path);
 	ft_printf(" -> %s", buf);
