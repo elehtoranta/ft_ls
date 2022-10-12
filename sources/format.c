@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 04:26:10 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/12 04:36:09 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,19 +59,21 @@ static void	get_unique_forms(t_flist *fnode)
 	t_passwd	*passwd;
 	t_group		*group;
 
-	lform = NULL;
 	while (fnode)
 	{
 		if (fnode->stat != NULL)
 		{
 			lform = init_lform();
 			passwd = getpwuid(fnode->stat->st_uid);
-			group = getgrgid(fnode->stat->st_gid);
 			if (!passwd) // No match, display UID
 				lform->author = ft_itoa(fnode->stat->st_uid);
 			else
 				lform->author = ft_strdup(passwd->pw_name);
-			lform->group = ft_strdup(group->gr_name);
+			group = getgrgid(fnode->stat->st_gid);
+			if (!group)
+				lform->group = ft_itoa(fnode->stat->st_gid);
+			else
+				lform->group = ft_strdup(group->gr_name);
 			if (!lform->author || !lform->group)
 				ls_error("Allocation of author or group strings failed");
 			fnode->lform = lform;
