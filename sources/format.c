@@ -6,22 +6,29 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 23:07:55 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 07:02:46 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-/* Gets the common attributes for the long format, so that the field widths
- * can be aligned correctly.
- */
-static void	get_common_widths(t_fwidths *fwidths, t_flist *flist)
+static void	init_fwidths(t_fwidths *fwidths)
 {
 	fwidths->links_len = 0;
 	fwidths->author_len = 0;
 	fwidths->group_len = 0;
 	fwidths->size_len = 0;
 	fwidths->total_blocks = 0;
+	fwidths->major = 0;
+	fwidths->minor = 0;
+}
+
+/* Gets the common attributes for the long format, so that the field widths
+ * can be aligned correctly.
+ */
+static void	get_common_widths(t_fwidths *fwidths, t_flist *flist)
+{
+	init_fwidths(fwidths);
 	while (flist)
 	{
 		if (flist->stat != NULL)
@@ -34,10 +41,16 @@ static void	get_common_widths(t_fwidths *fwidths, t_flist *flist)
 				fwidths->group_len = ft_strlen(flist->lform->group);
 			if (ft_count_digs(flist->stat->st_size) > fwidths->size_len)
 				fwidths->size_len = ft_count_digs(flist->stat->st_size);
+			if (ft_count_digs(flist->lform->major) > fwidths->major)
+				fwidths->major = ft_count_digs(flist->lform->major);
+			if (ft_count_digs(flist->lform->minor) > fwidths->minor)
+				fwidths->minor = ft_count_digs(flist->lform->minor);
 			fwidths->total_blocks += flist->stat->st_blocks;
 		}
 		flist = flist->next;
 	}
+	if (fwidths->minor > 3)
+		fwidths->minor = 3;
 }
 
 static t_longform	*init_lform(void)
@@ -52,7 +65,17 @@ static t_longform	*init_lform(void)
 	lform->author = NULL;
 	lform->group = NULL;
 	lform->date = NULL;
+	lform->major = 0;
+	lform->minor = 0;
 	return (lform);
+}
+
+#define MAJOR_MASK 0x7FF00000
+#define MINOR_MASK 0xFFFFF
+static void	get_device_id(t_flist *fnode, t_longform *lform)
+{
+	lform->major = (fnode->stat->st_rdev & (MAJOR_MASK)) >> 24;
+	lform->minor = (fnode->stat->st_rdev & (MINOR_MASK));
 }
 
 void	get_unique_forms(t_flist *fnode)
@@ -78,6 +101,9 @@ void	get_unique_forms(t_flist *fnode)
 				lform->group = ft_strdup(group->gr_name);
 			if (!lform->author || !lform->group)
 				ls_error("Allocation of author or group strings failed");
+			if ((fnode->stat->st_mode & S_IFMT) == S_IFCHR || \
+				(fnode->stat->st_mode & S_IFMT) == S_IFBLK)
+				get_device_id(fnode, lform);
 			fnode->lform = lform;
 		}
 		fnode = fnode->next;
@@ -137,6 +163,23 @@ static void	resolve_link(t_flist *fnode, const char *base)
 	ft_printf(" -> %s", buf);
 }
 
+static void	print_sizeblock(t_flist *fnode, t_fwidths *fwidths)
+{
+	if ((fnode->stat->st_mode & S_IFMT) == S_IFCHR \
+			|| (fnode->stat->st_mode & S_IFMT) == S_IFBLK)
+	{
+		if (fnode->lform->minor > 512)
+			ft_printf(" %*u, %#*x ", fwidths->major, fnode->lform->major, \
+					fwidths->minor, fnode->lform->minor);
+		else
+			ft_printf(" %*u, %*u ", fwidths->major, fnode->lform->major, \
+					fwidths->minor, fnode->lform->minor);
+	}
+	else
+		ft_printf("%*u ", fwidths->size_len, fnode->stat->st_size);
+
+}
+
 static void	print_longform(t_flist *flist, t_options *op, const char *path)
 {
 	t_fwidths	fwidths;
@@ -149,9 +192,9 @@ static void	print_longform(t_flist *flist, t_options *op, const char *path)
 		{
 			print_permissions(flist);
 			ft_printf("%*u ", fwidths.links_len, flist->stat->st_nlink);
-			ft_printf("%*s  ", fwidths.author_len, flist->lform->author);
-			ft_printf("%*s  ", fwidths.group_len, flist->lform->group);
-			ft_printf("%*u ", fwidths.size_len, flist->stat->st_size);
+			ft_printf("%-*s  ", fwidths.author_len, flist->lform->author);
+			ft_printf("%-*s  ", fwidths.group_len, flist->lform->group);
+			print_sizeblock(flist, &fwidths);
 			output_date(get_time(flist, op));
 			ft_printf(" %s", flist->filename);
 			if ((flist->stat->st_mode & S_IFMT) == S_IFLNK)
@@ -170,7 +213,6 @@ void	format(t_options *op, t_flist *flist, const char *path)
 	}
 	else
 	{
-		/*column_format();*/ // Bonus
 		while (flist)
 		{
 			ft_printf("%s\n", flist->filename);

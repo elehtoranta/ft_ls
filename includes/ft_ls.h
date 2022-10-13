@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 05:11:23 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 06:51:12 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ typedef struct		s_longform
 	char			*author; // 1 + strlen + 2
 	char			*group; // 2 + strlen + 2
 	char			*date; // reformat date into the right string
+	uint32_t		major;
+	uint32_t		minor;
 }					t_longform;
 
 typedef struct		s_fwidths
@@ -78,6 +80,8 @@ typedef struct		s_fwidths
 	uint16_t		author_len;
 	uint16_t		group_len;
 	uint16_t		size_len;
+	uint8_t			major;
+	uint8_t			minor;
 }					t_fwidths;
 
 typedef struct		s_flist
