@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:40:58 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 07:35:42 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 05:08:25 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,29 @@ t_flist	*init_fnode(void)
 	flist->lform = NULL;
 	flist->next = NULL;
 	return (flist);
+}
+
+t_flist	*append_fnode(t_flist **flist, t_flist *new)
+{
+	t_flist	*rest;
+	t_flist	*current;
+
+	rest = NULL;
+	if (new == NULL)
+		return (new);
+	if (new->next != NULL)
+		rest = new->next;
+	new->next = NULL;
+	if (!*flist)
+		*flist = new;
+	else
+	{
+		current = *flist;
+		while (current->next)
+			current = current->next;
+		current->next = new;
+	}
+	return (rest);
 }
 
 /* Adds a new element to the end of a list.
@@ -48,7 +71,7 @@ t_flist	*append_flist(t_flist **last, t_flist *new)
 }
 
 /* Adds the element 'new' as the new head of the file list starting at 'head'.
- */
+*/
 void	prepend_flist(t_flist **head, t_flist *new)
 {
 	if (new == NULL)
@@ -56,6 +79,19 @@ void	prepend_flist(t_flist **head, t_flist *new)
 	if (*head != NULL)
 		new->next = *head;
 	*head = new;
+}
+
+size_t	len_flist(t_flist *flist)
+{
+	size_t	len;
+
+	len = 0;
+	while (flist)
+	{
+		len++;
+		flist = flist->next;
+	}
+	return (len);
 }
 
 /* Deletes the head of a file list and returns the new head (node after the
@@ -86,7 +122,7 @@ void	pop_flist(t_flist **head)
 }
 
 /* Frees and NULLs (deletes) the entire flist structure.
- */
+*/
 void	delete_flist(t_flist **head)
 {
 	while (*head != NULL)

@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/12 00:35:15 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/13 02:26:20 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,11 +16,13 @@ SRCDIR	:= sources
 SRCS	:= main.c \
 		   parser.c \
 		   reader.c \
+		   mergesort.c \
 		   sort.c \
 		   list.c \
 		   format.c \
 		   error.c \
-		   permissions.c
+		   permissions.c \
+		   comparisons.c
 
 OBJDIR	:= objects
 OBJS	:= $(SRCS:.c=.o)

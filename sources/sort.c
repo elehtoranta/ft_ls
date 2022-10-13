@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:59:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 23:13:46 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 05:10:21 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 
 /* Swaps places of two items in a flist linked list.
  */
-static void	swap_items(t_flist **first, t_flist **head, t_flist **prev)
+void	swap_items(t_flist *a, t_flist *b, t_flist **head, t_flist **prev)
 {
-	const t_flist	*tail = (*first)->next->next; //tail, can be NULL;
+	const t_flist	*tail = b->next; //tail, can be NULL;
 
-	(*first)->next->next = *first;
-	if (*first == *head)
-		*head = (*first)->next;
+	b->next = a;
+	if (a == *head)
+		*head = a->next;
 	else
-		(*prev)->next = (*first)->next;
-	(*first)->next = (t_flist *)tail;
+		(*prev)->next = a->next;
+	a->next = (t_flist *)tail;
 }
 
 /* Reverses the given list 'flist' (by reversing the direction of pointers)
@@ -39,7 +39,7 @@ t_flist	*reverse_flist(t_flist *flist, t_flist *head)
 		return (flist);
 	else if (!flist->next->next) // two elements
 	{
-		swap_items(&flist, &head, &flist);
+		swap_items(flist, flist->next, &head, &flist);
 		return (head);
 	}
 	next = flist->next;
@@ -55,46 +55,4 @@ t_flist	*reverse_flist(t_flist *flist, t_flist *head)
 	}
 	next->next = flist;
 	return (next);
-}
-
-/* Lexicographical comparison. Default mode of sorting.
- */
-static int	lex_cmp(t_flist *first, t_flist *second)
-{
-	return (ft_strcmp(first->filename, second->filename));
-}
-
-static int	mtime_cmp(t_flist *first, t_flist *second)
-{
-	const int	diff = second->stat->st_mtime - first->stat->st_mtime;
-	if (diff == 0)
-		return (ft_strcmp(first->filename, second->filename));
-	else
-		return (diff);
-}
-
-/* Sorting file names. Dispatching to a sorting function based on the index
- * saved at the op->option bitfield.
- */
-void	sort(t_options *op, t_flist **head)
-{
-	sorter	*compare[N_SORTF] = { lex_cmp, mtime_cmp };
-	t_flist	*flist;
-	t_flist	*prev;
-
-	flist = *head;
-	prev = *head;
-	while (flist->next)
-	{
-		if (compare[(op->options & MASK_SORT) >> 4](flist, flist->next) > 0)
-		{
-			swap_items(&flist, head, &prev);
-			flist = *head;
-		}
-		else
-		{
-			prev = flist;
-			flist = flist->next;
-		}
-	}
 }

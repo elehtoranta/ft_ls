@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 08:28:28 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 05:11:23 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,10 @@ void	ls_error(const char *errormsg);
 
 // File list functions
 t_flist	*init_fnode(void);
+t_flist	*append_fnode(t_flist **flist, t_flist *new);
 t_flist	*append_flist(t_flist **last, t_flist *new);
 void	prepend_flist(t_flist **head, t_flist *new);
+size_t	len_flist(t_flist *flist);
 void	pop_flist(t_flist **head);
 void	delete_flist(t_flist **head);
 
@@ -109,9 +111,20 @@ void	get_unique_forms(t_flist *fnode);
 
 // Sorting function dispatcher. Makes use of small utility functions,
 // of which some are part of ft library.
-typedef int	sorter(t_flist *first, t_flist *second);
-void		sort(t_options *op, t_flist **head);
-t_flist		*reverse_flist(t_flist *flist, t_flist *head);
+#define N_SORTF 2
+typedef int	(*t_sorter)(t_flist *first, t_flist *second);
+int	lex_cmp(t_flist *first, t_flist *second);
+int	mtime_cmp(t_flist *first, t_flist *second);
+
+// Global variable for dispatcher
+static const t_sorter	g_compare[N_SORTF] = { lex_cmp, mtime_cmp };
+void	swap_items(t_flist *a, t_flist *b, t_flist **head, t_flist **prev);
+
+// Merge sort implementation
+t_flist				*ls_merge(t_flist *left, t_flist *right, uint16_t options);
+t_flist				*ls_mergesort(t_flist *flist, size_t len, uint16_t options);
+//void		sort(t_options *op, t_flist **head);
+t_flist				*reverse_flist(t_flist *flist, t_flist *head);
 
 // Output formatter
 void		format(t_options *op, t_flist *flist, const char *path);

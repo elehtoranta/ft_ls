@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 23:23:15 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 05:22:05 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	list_dir(t_options *op, char *path)
 	{
 		if (op->options & (O_LONG | O_MTIME))
 			get_unique_forms(flist);
-		sort(op, &flist);
+		flist = ls_mergesort(flist, len_flist(flist), op->options);
 		if (op->options & O_REV)
 			flist = reverse_flist(flist, flist);
 		format(op, flist, (const char *)path);
@@ -171,8 +171,6 @@ void	list(t_options *op, char *path)
 	free(path);
 }
 
-/* Iterate through file arguments
-*/
 void	list_args(t_options *op, char **argv, int argc)
 {
 	if (argc == 0)
