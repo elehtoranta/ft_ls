@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:44 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 20:53:30 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/14 01:56:40 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,20 @@
 static void	match_option(t_options *op, char *c_option)
 {
 	static const uint16_t	option_bitflags[N_OPTIONS] = {
-		O_LONG, O_REC, O_ALL, O_REV, O_MTIME
+		O_LONG, O_REC, O_ALL, O_REV, O_TIME
 	};
 	int						index;
 
 	index = ft_strchr(OPTION_CHARS, *c_option) - OPTION_CHARS;
-	op->options |= option_bitflags[index];
+	if (option_bitflags[index] & MASK_TIME)
+		op->options |= ((op->options & ~MASK_TIME) & option_bitflags[index]);
+	else
+		op->options |= option_bitflags[index];
 }
 
 static void	set_options(const char *option_string, t_options *op)
 {
-	char	*c_option;
+	char		*c_option;
 
 	while (option_string)
 	{
@@ -35,6 +38,7 @@ static void	set_options(const char *option_string, t_options *op)
 		match_option(op, c_option);
 		option_string++;
 	}
+	select_time_mode(op);
 }
 
 static void	print_usage(const char nonvalid_char)

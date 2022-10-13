@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/13 21:01:22 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/14 02:11:57 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,9 @@ NAME	:= ft_ls
 SRCDIR	:= sources
 SRCS	:= main.c \
 		   parser.c \
+		   time.c \
 		   reader.c \
-		   mergesort.c \
-		   reverse.c \
+		   sort.c \
 		   flist.c \
 		   flist_utils.c \
 		   format.c \

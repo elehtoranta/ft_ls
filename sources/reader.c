@@ -6,11 +6,12 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 20:55:15 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/14 00:45:01 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include "sorting.h"
 
 static void	recurse_directories(t_options *op, char *path, t_flist *flist)
 {
@@ -48,11 +49,9 @@ void	list_dir(t_options *op, char *path)
 		return (ls_read_error("", path, op, E_MINOR));
 	if (collect_flist(&flist, dirp, path, op))
 	{
-		if (op->options & (O_LONG | O_MTIME))
+		if (op->options & (O_LONG | O_TIME))
 			get_unique_forms(flist);
-		flist = ls_mergesort(flist, len_flist(flist), op->options);
-		if (op->options & O_REV)
-			flist = reverse_flist(flist, flist);
+		flist = sort(flist, op->options, 0);
 		format(op, flist, (const char *)path);
 		if (op->options & O_REC)
 			recurse_directories(op, path, flist);

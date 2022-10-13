@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 21:22:00 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/14 02:10:06 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,27 +25,31 @@
 # include <time.h>
 # include "ft_printf.h"
 
+// Return values. 0 (success) is returned when !(E_MINOR | E_MAJOR)
 # define RETURN_SHIFT	12
 # define E_MINOR		1
 # define E_MAJOR		2
+
 // Options available. Expanded when adding supported options.
 # define OPTION_CHARS "lRart"
-# define N_OPTIONS 5
+# define N_OPTIONS	5
 # define O_LONG		0x0001
 # define O_REC		0x0002
 # define O_ALL		0x0004
 # define O_REV		0x0008
-# define O_MTIME	0x0010
+# define O_TIME		0x0010
 
-// Sorting options (2 bits == 4 permutations)
-# define MASK_SORT	0x0030
-# define S_LEX		0x0000
-# define S_MTIME	0x0010
+// Time based sorting options (MODIFIED IF OPTIONS ARE ADDED)
+# define MASK_TIME	0x0F00
+# define O_MTIME	0x0100
+//# define O_ATIME		0x0200
+//# define O_BTIME		0x0300
+//# define O_CTIME		0x0400
 
 // Masking for time option selected. The time displayed in
 // long format can represent time modified, created or last
-// accessed.
-# define MASK_TIME	0x0010
+// accessed, of which only the first is an implemented
+// sorting option here
 
 // Aliasing to reduce typing 'struct' every time on use
 typedef struct stat		t_stat;
@@ -59,13 +63,6 @@ typedef struct s_options
 	uint16_t	options;
 }	t_options;
 
-// Field width formatting for long format.
-// Comments are of form: whitespace before + content + whitespace after
-// Whitespace is of course not repeated, but shared between adjecent
-// blocks.
-# define PERMS_FW	11
-# define DATE_FW	12
-
 typedef struct s_longform
 {
 	nlink_t			hardlinks;
@@ -77,9 +74,16 @@ typedef struct s_longform
 	uint32_t		minor;
 }	t_longform;
 
+// Field width formatting for long format.
+// Comments are of form: whitespace before + content + whitespace after
+// Whitespace is of course not repeated, but shared between adjecent
+// blocks.
+# define PERMS_FW	11
+# define DATE_FW	12
+
 typedef struct s_fwidths
 {
-	size_t			total_blocks;
+	uint32_t		total_blocks;
 	uint16_t		links_len;
 	uint16_t		author_len;
 	uint16_t		group_len;
@@ -98,6 +102,7 @@ typedef struct s_flist
 
 // Parser function. Checks the validity of options, and sets the option struct.
 char		**parse_options(t_options *op, char **argv, int *argc);
+void		select_time_mode(t_options *op);
 
 void		list(t_options *op, char *path);
 void		list_args(t_options *op, char **argv, int argc);
@@ -117,20 +122,6 @@ size_t		len_flist(t_flist *flist);
 void		print_longform(t_flist *flist, t_options *op, const char *path);
 void		get_unique_forms(t_flist *fnode);
 void		get_common_widths(t_fwidths *fwidths, t_flist *flist);
-
-// Sorting function dispatcher. Makes use of small utility functions,
-// of which some are part of ft library.
-# define N_SORTF 2
-
-int			lex_cmp(t_flist *first, t_flist *second);
-int			mtime_cmp(t_flist *first, t_flist *second);
-typedef int				(*t_sorter)(t_flist *first, t_flist *second);
-static const t_sorter	g_compare[N_SORTF] = {lex_cmp, mtime_cmp};
-
-// Merge sort implementation
-t_flist		*ls_merge(t_flist *left, t_flist *right, uint16_t options);
-t_flist		*ls_mergesort(t_flist *flist, size_t len, uint16_t options);
-t_flist		*reverse_flist(t_flist *flist, t_flist *head);
 
 // Output formatter
 void		format(t_options *op, t_flist *flist, const char *path);

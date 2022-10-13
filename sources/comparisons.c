@@ -6,11 +6,16 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 02:11:45 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 19:48:47 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/14 00:14:58 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+int	reverse_cmp(t_flist *first, t_flist *second)
+{
+	return (!ft_strcmp(first->filename, second->filename));
+}
 
 /* Lexicographical comparison. Default mode of sorting.
  */
