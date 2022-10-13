@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 02:11:45 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 02:25:04 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 19:48:47 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,3 @@ int	mtime_cmp(t_flist *first, t_flist *second)
 	else
 		return (diff);
 }
-

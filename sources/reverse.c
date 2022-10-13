@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort.c                                             :+:      :+:    :+:   */
+/*   reverse.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/02 11:59:21 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 05:10:21 by elehtora         ###   ########.fr       */
+/*   Created: 2022/10/13 20:56:40 by elehtora          #+#    #+#             */
+/*   Updated: 2022/10/13 21:06:38 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-#define N_SORTF 2
 
 /* Swaps places of two items in a flist linked list.
  */
-void	swap_items(t_flist *a, t_flist *b, t_flist **head, t_flist **prev)
+static void	swap_items(t_flist *a, t_flist *b, t_flist **head, t_flist **prev)
 {
-	const t_flist	*tail = b->next; //tail, can be NULL;
+	const t_flist	*tail = b->next;
 
 	b->next = a;
 	if (a == *head)
@@ -35,9 +34,9 @@ t_flist	*reverse_flist(t_flist *flist, t_flist *head)
 	t_flist	*next;
 	t_flist	*next_over;
 
-	if (!flist->next) // single element
+	if (!flist->next)
 		return (flist);
-	else if (!flist->next->next) // two elements
+	else if (!flist->next->next)
 	{
 		swap_items(flist, flist->next, &head, &flist);
 		return (head);

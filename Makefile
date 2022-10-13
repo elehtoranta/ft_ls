@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/13 02:26:20 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/13 21:01:22 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,12 +17,16 @@ SRCS	:= main.c \
 		   parser.c \
 		   reader.c \
 		   mergesort.c \
-		   sort.c \
-		   list.c \
+		   reverse.c \
+		   flist.c \
+		   flist_utils.c \
 		   format.c \
-		   error.c \
 		   permissions.c \
-		   comparisons.c
+		   comparisons.c \
+		   longform.c \
+		   longform_common.c \
+		   longform_unique.c \
+		   error.c
 
 OBJDIR	:= objects
 OBJS	:= $(SRCS:.c=.o)

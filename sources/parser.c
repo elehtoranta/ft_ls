@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:44 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 19:44:37 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 20:53:30 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 static void	match_option(t_options *op, char *c_option)
 {
-	static const uint16_t	option_bitflags[N_OPTIONS] =
-	{
+	static const uint16_t	option_bitflags[N_OPTIONS] = {
 		O_LONG, O_REC, O_ALL, O_REV, O_MTIME
 	};
-	int	index;
+	int						index;
 
 	index = ft_strchr(OPTION_CHARS, *c_option) - OPTION_CHARS;
 	op->options |= option_bitflags[index];

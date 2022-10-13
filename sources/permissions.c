@@ -6,11 +6,13 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 03:53:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/12 01:57:14 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 21:05:21 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#define LS_PERMISSIONS 7
+#define PERM_CHARS_LEN 9
 
 /* Handles the special cases concerning the execution/search permissions of
  * a given entry, caused by the additional permission layer of set_*_IDs and
@@ -43,7 +45,6 @@ static void	reset_exec_permissions(t_flist *fnode, char *buf)
 	}
 }
 
-#define PERM_CHARS_LEN 9
 /* Set user, group and world permission chars (hence 'ugw').
  */
 static void	set_ugw(t_flist *fnode, char *buf)
@@ -68,11 +69,11 @@ static void	set_ugw(t_flist *fnode, char *buf)
  */
 static void	set_filetype(t_flist *fnode, char *buf)
 {
-	const int	filetypes[LS_PERMISSIONS] = {
+	static const int	filetypes[LS_PERMISSIONS] = {
 		S_IFIFO, S_IFCHR, S_IFDIR, S_IFBLK, S_IFREG, S_IFLNK, S_IFSOCK
 	};
-	const char	*permission_chars = "pcdb-ls";
-	int			i;
+	const char			*permission_chars = "pcdb-ls";
+	int					i;
 
 	i = 0;
 	while (i < LS_PERMISSIONS)

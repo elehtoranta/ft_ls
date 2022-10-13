@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 19:17:33 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 20:52:01 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,5 @@ int	main(int argc, char **argv)
 	init_options(&options);
 	argv = parse_options(&options, &argv[1], &argc);
 	list_args(&options, argv, argc);
-
 	return (options.options >> RETURN_SHIFT);
 }
