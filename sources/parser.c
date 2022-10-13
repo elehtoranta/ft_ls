@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:44 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 07:05:58 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 17:58:56 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	set_options(const char *option_string, t_options *op)
 static void	print_usage(const char nonvalid_char)
 {
 	ft_printf("ls: illegal option -- %c\n", nonvalid_char);
-	ft_printf("usage: ls [%s] [file...]\n", OPTION_CHARS);
+	ft_printf("usage: ls [%s] [file ...]\n", OPTION_CHARS);
 	exit(EXIT_FAILURE);
 }
 
