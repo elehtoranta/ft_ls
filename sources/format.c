@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 07:02:46 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 19:28:05 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static t_longform	*init_lform(void)
 
 	lform = (t_longform *)malloc(sizeof(t_longform));
 	if (!lform)
-		ls_error("Long format allocation failed");
+		ls_critical_error("Long format allocation failed");
 	lform->hardlinks = 0;
 	lform->size = 0;
 	lform->author = NULL;
@@ -100,7 +100,7 @@ void	get_unique_forms(t_flist *fnode)
 			else
 				lform->group = ft_strdup(group->gr_name);
 			if (!lform->author || !lform->group)
-				ls_error("Allocation of author or group strings failed");
+				ls_critical_error("Allocation of author or group strings failed");
 			if ((fnode->stat->st_mode & S_IFMT) == S_IFCHR || \
 				(fnode->stat->st_mode & S_IFMT) == S_IFBLK)
 				get_device_id(fnode, lform);
@@ -145,18 +145,18 @@ static void	output_date(time_t format_time)
 }
 
 #define READLINK_BUFSIZE 1024
-static void	resolve_link(t_flist *fnode, const char *base)
+static void	resolve_link(t_flist *fnode, const char *base, t_options *op)
 {
 	char	*path;
 	char	buf[READLINK_BUFSIZE];
 
 	path = ft_strdjoin(base, "/", fnode->filename);
 	if (!path)
-		ls_error("Path allocation failed");
+		ls_critical_error("Path allocation failed");
 	ft_bzero(buf, READLINK_BUFSIZE);
 	if (readlink(path, buf, READLINK_BUFSIZE) == -1)
 	{
-		ls_read_error("", fnode->filename);
+		ls_read_error("", fnode->filename, op, E_MINOR);
 		return (free(path));
 	}
 	free(path);
@@ -198,7 +198,7 @@ static void	print_longform(t_flist *flist, t_options *op, const char *path)
 			output_date(get_time(flist, op));
 			ft_printf(" %s", flist->filename);
 			if ((flist->stat->st_mode & S_IFMT) == S_IFLNK)
-				resolve_link(flist, path);
+				resolve_link(flist, path, op);
 			ft_printf("\n");
 		}
 		flist = flist->next;

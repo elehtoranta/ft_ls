@@ -6,30 +6,30 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 05:22:05 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 19:11:34 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void	add_stat(t_flist *fnode, const char *dir)
+static void	add_stat(t_flist *fnode, const char *dir, t_options *op)
 {
 	t_stat	stat;
 	char	*path;
 
 	path = ft_strdjoin(dir, "/", fnode->filename);
 	if (!path)
-		ls_error("Path allocation failed");
+		ls_critical_error("Path allocation failed");
 	if (lstat(path, &stat) == -1)
 	{
-		ls_read_error("", fnode->filename);
+		ls_read_error("", fnode->filename, op, E_MINOR);
 		fnode->stat = NULL;
 		free(path);
 		return ;
 	}
 	fnode->stat = (t_stat *)malloc(sizeof(stat));
 	if (!fnode->stat && errno == ENOMEM)
-		ls_error("Stat allocation failed");
+		ls_critical_error("Stat allocation failed");
 	ft_memcpy(fnode->stat, &stat, sizeof(stat));
 	free(path);
 }
@@ -39,17 +39,17 @@ static t_flist	*get_fnode(t_options *op, char *filename, const char *path)
 	t_flist	*fnode;
 
 	if (!filename)
-		ls_error("Invalid filename in get_fnode()");
+		ls_critical_error("Invalid filename in get_fnode()");
 	fnode = init_fnode();
 	if (!fnode)
-		ls_error("Initializing file node failed");
+		ls_critical_error("Initializing file node failed");
 	fnode->filename = ft_strdup(filename);
 	if (!fnode->filename)
-		ls_error("Allocating memory to file name failed");
+		ls_critical_error("Allocating memory to file name failed");
 	if (errno == ENOMEM)
-		ls_error("File name allocation failed");
+		ls_critical_error("File name allocation failed");
 	if (op->options & (O_LONG | MASK_TIME | O_REC))
-		add_stat(fnode, path);
+		add_stat(fnode, path, op);
 	return (fnode);
 }
 
@@ -64,7 +64,7 @@ static t_flist	*collect_flist(t_flist **head, DIR *dirp, const char *path, t_opt
 	{
 		dirent = readdir(dirp);
 		if (errno == EBADF)
-			ls_error("Reading directory stream failed");
+			ls_critical_error("Reading directory stream failed");
 		if (!dirent)
 			return (*head);
 		if (dirent->d_name[0] == '.' && !(op->options & O_ALL))
@@ -94,7 +94,7 @@ static void	recurse_directories(t_options *op, char *path, t_flist *flist)
 			else
 				dirpath = ft_strdjoin(path, "/", flist->filename);
 			if (!dirpath)
-				ls_error("Path name allocation failed");
+				ls_critical_error("Path name allocation failed");
 			ft_printf("\n%s:\n", dirpath);
 			list(op, dirpath);
 		}
@@ -110,7 +110,7 @@ void	list_dir(t_options *op, char *path)
 	flist = NULL;
 	dirp = opendir(path);
 	if (!dirp)
-		return (ls_read_error("", path));
+		return (ls_read_error("", path, op, E_MINOR));
 	if (collect_flist(&flist, dirp, path, op))
 	{
 		if (op->options & (O_LONG | O_MTIME))
@@ -124,7 +124,7 @@ void	list_dir(t_options *op, char *path)
 		delete_flist(&flist);
 	}
 	if (closedir(dirp) == -1)
-		ls_error("Closing directory stream failed");
+		ls_critical_error("Closing directory stream failed");
 }
 
 static void	list_file(t_options *op, char *path)
@@ -155,7 +155,7 @@ void	list(t_options *op, char *path)
 	t_stat	stat;
 
 	if (lstat(path, &stat) == -1)
-		ls_read_error("", path);
+		ls_read_error("", path, op, E_MAJOR);
 	else
 	{
 		if ((stat.st_mode & S_IFMT) == S_IFDIR)

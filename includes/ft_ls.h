@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 06:51:12 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 19:17:25 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 # include <time.h>
 # include "ft_printf.h"
 
+# define RETURN_SHIFT	12
+# define E_MINOR		1
+# define E_MAJOR		2
 // Options available. Expanded when adding supported options.
 # define OPTION_CHARS "lRart"
 # define N_OPTIONS 5
@@ -98,9 +101,6 @@ char	**parse_options(t_options *op, char **argv, int *argc);
 void	list(t_options *op, char *path);
 void	list_args(t_options *op, char **argv, int argc);
 
-// Error wrapper to print perror(msg) and exit(EXIT_FAILURE)
-void	ls_error(const char *errormsg);
-
 // File list functions
 t_flist	*init_fnode(void);
 t_flist	*append_fnode(t_flist **flist, t_flist *new);
@@ -138,6 +138,8 @@ void		format(t_options *op, t_flist *flist, const char *path);
 void		print_permissions(t_flist *fnode);
 
 // Error functions
-void		ls_read_error(const char *message, const char *path);
+void		ls_read_error(const char *message, const char *path, \
+		t_options *op, int status);
+void		ls_critical_error(const char *errormsg);
 
 # endif

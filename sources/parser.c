@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:44 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 17:58:56 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/13 18:41:32 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,11 @@ char	**parse_options(t_options *op, char **argv, int *argc)
 			print_usage(*non_valid);
 		set_options(*argv + 1, op);
 		argv++;
+	}
+	if (ft_strequ(*argv, "--") == 1)
+	{
+		*argc -= 1;
+		argv += 1;
 	}
 	return (argv);
 }
