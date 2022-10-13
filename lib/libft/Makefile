@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/03 15:27:40 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/11 23:36:28 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/14 02:53:07 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,7 +107,7 @@ SRCS		=	ft_atoi.c			\
 OBJS = $(SRCS:.c=.o)
 
 CC=gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -O3
 LIB=ar rcs
 RM=/bin/rm -f
 
@@ -125,11 +125,11 @@ $(NAME) : $(OBJS)
 	@$(CC) $(CFLAGS) -c $<
 
 clean :
-	@echo "\033[1;32mCleaning object files.\033[0m"
+	@echo "Cleaned object files of \033[1;32m$(NAME)\033[0m"
 	@$(RM) $(OBJS)
 
 fclean : clean
-	@echo "\033[1;32mCleaning $(NAME)...\033[0m"
+	@echo "Cleaned build executable of \033[1;32m$(NAME)\033[0m"
 	@$(RM) $(NAME)
 
 re : fclean all

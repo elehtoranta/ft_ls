@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/14 02:11:57 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/14 02:56:23 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,31 +39,36 @@ LIB		:= -L$(LIBDIR) -lftprintf
 INCL	:= -Iincludes -I$(LIBDIR)/includes -I$(LIBDIR)/libft
 
 CC		:= gcc
-CFLAGS	:= -Wall -Werror -Wextra -g # Not specified by subject, but ?
+CFLAGS	:= -Wall -Werror -Wextra -O3
 
 RM		:= /bin/rm -rf
 
 # Rules
-all : $(NAME)
+all : build
 
-$(NAME) : $(OBJDIR) $(LIBNAME) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIB) -o $(NAME)
+$(NAME) : $(OBJS)
+	@echo "Linking executable:\t\033[1;32m$(NAME)\033[0m"
+	@$(CC) $(CFLAGS) $(OBJS) $(LIB) -o $(NAME)
+
+build : $(OBJDIR)
+	@$(MAKE) -C $(LIBDIR)
+	@$(MAKE) $(NAME)
 
 $(OBJDIR) :
-	-mkdir -p $(OBJDIR)
-
-$(LIBNAME) :
-	$(MAKE) -C $(LIBDIR)
+	@-mkdir -p $(OBJDIR)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) $(INCL) -c $< -o $@
+	@echo "Creating object file:\t\033[1;32m$(notdir $(<:.c=.o))\033[0m"
+	@$(CC) $(CFLAGS) $(INCL) -c $< -o $@
 
 clean :
-	$(RM) $(OBJS) $(OBJDIR)
-	$(MAKE) -C $(LIBDIR) clean
+	@echo "Cleaned object files of \033[1;32m$(NAME)\033[0m"
+	@$(RM) $(OBJS) $(OBJDIR)
+	@$(MAKE) -C $(LIBDIR) clean
 
 fclean : clean
-	$(RM) $(NAME)
-	$(MAKE) -C $(LIBDIR) fclean
+	@echo "Cleaned build executable of \033[1;32m$(NAME)\033[0m"
+	@$(RM) $(NAME)
+	@$(MAKE) -C $(LIBDIR) fclean
 
 re : fclean all

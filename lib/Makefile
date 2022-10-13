@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/18 11:10:47 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/11 23:36:16 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/14 02:50:06 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,6 @@ NAME		:= libftprintf.a
 
 # Name to feed as library path for user (ftprintf)
 BIN_LIB		:= $(subst lib,,$(basename $(NAME)))
-
 
 SRCS		:= ft_printf.c \
 			   integer.c \
@@ -44,49 +43,38 @@ INCL		:= -Iincludes -I$(LIBFT_DIR)
 # The libft library is included from ./lib (see header)
 
 CC			:= gcc
-CFLAGS		:= -Wall -Werror -Wextra -g
+CFLAGS		:= -Wall -Werror -Wextra -O3
 RM			:= /bin/rm -rf
 
 
 ### RULES ###
 .PHONY : build libft test clean fclean re debug flags
 
-all : $(NAME)
+all : build
 
-$(NAME) : $(OBJDIR) $(LIBFT) $(OBJS)
+$(NAME) : $(OBJS)
+	@echo "Linking as library \033[1;32m$(NAME)...\033[0m"
 	@ar -rcs $@ $(OBJS) $(LIBFT_OBJS)
 
-$(OBJDIR) :
-	mkdir -p $(@)
+build : $(OBJDIR)
+	@$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) $(NAME)
 
-$(LIBFT) :
-	$(MAKE) -C $(LIBFT_DIR)
+$(OBJDIR) :
+	@mkdir -p $(@)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@echo "Creating object file:\t\033[1;32m$(notdir $(<:.c=.o))\033[0m"
 	@$(CC) $(CFLAGS) $(INCL) -c $< -o $@
 
-
 clean :
 	@$(RM) $(OBJDIR) *.dSYM
-	$(MAKE) -C $(LIBFT_DIR) clean
-	@echo "Cleaned object files."
+	@$(MAKE) -C $(LIBFT_DIR) clean
+	@echo "Cleaned object files of \033[1;32m$(NAME)\033[0m"
 
 fclean : clean
-	$(RM) $(NAME) $(TEST_NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
-	@echo "Cleaned build executables."
+	@$(RM) $(NAME) $(TEST_NAME)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@echo "Cleaned build executable of \033[1;32m$(NAME)\033[0m"
 
 re : fclean all
-
-
-# Testing utilities
-TEST_DIR	:= tests
-TEST_SRCS	:= dot_test.c
-TEST_SRCS	:= $(addprefix $(TEST_DIR)/,$(TEST_SRCS))
-TEST_INCL	:= -I$(TEST_DIR)
-TEST_NAME	:= printf.test
-
-test : all
-	$(CC) -g $(TEST_SRCS) $(INCL) $(TEST_INCL) \
-		-L. -l$(BIN_LIB) -o $(TEST_NAME)
