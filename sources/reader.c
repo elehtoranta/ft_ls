@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/14 00:45:01 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/15 01:47:22 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ static void	recurse_directories(t_options *op, char *path, t_flist *flist)
 				dirpath = ft_strdjoin(path, "/", flist->filename);
 			if (!dirpath)
 				ls_critical_error("Path name allocation failed");
-			ft_printf("\n%s:\n", dirpath);
-			list(op, dirpath);
+			list(op, dirpath, true);
 		}
 		flist = flist->next;
 	}
@@ -83,7 +82,7 @@ static void	list_file(t_options *op, char *path)
 	delete_flist(&fnode);
 }
 
-void	list(t_options *op, char *path)
+void	list(t_options *op, char *path, bool print_dirprefix)
 {
 	t_stat	stat;
 
@@ -94,12 +93,14 @@ void	list(t_options *op, char *path)
 		if ((stat.st_mode & S_IFMT) == S_IFDIR)
 		{
 			if (stat.st_mode & S_IXUSR)
+			{
+				if (print_dirprefix== true)
+					ft_printf("\n%s:\n", path);
 				list_dir(op, path);
+			}
 		}
 		else
-		{
 			list_file(op, path);
-		}
 	}
 	free(path);
 }
@@ -107,7 +108,12 @@ void	list(t_options *op, char *path)
 void	list_args(t_options *op, char **argv, int argc)
 {
 	if (argc == 0)
-		list(op, ft_strdup("."));
+		list(op, ft_strdup("."), false);
+	if (argc == 1)
+	{
+		list(op, ft_strdup(*argv++), false);
+		argc--;
+	}
 	while (argc--)
-		list(op, ft_strdup(*argv++));
+		list(op, ft_strdup(*argv++), true);
 }

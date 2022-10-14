@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/14 02:10:06 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/15 01:43:29 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ typedef struct s_flist
 char		**parse_options(t_options *op, char **argv, int *argc);
 void		select_time_mode(t_options *op);
 
-void		list(t_options *op, char *path);
+void		list(t_options *op, char *path, bool print_dirprefix);
 void		list_args(t_options *op, char **argv, int argc);
 
 // File list functions
