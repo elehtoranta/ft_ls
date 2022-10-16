@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 23:02:39 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/14 01:41:53 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/15 00:21:48 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,25 @@ enum	e_sorting_modes
 	S_LEX,
 	S_MTIME,
 	S_REVERSE,
+	S_FILETYPE,
 };
 
 // Sorting function dispatcher. Makes use of small utility functions,
 // of which some are part of ft library.
-# define N_SORTF 3
+# define N_SORTF 4
 
 t_flist		*sort(t_flist *flist, uint16_t options, uint8_t mode);
 int			lex_cmp(t_flist *first, t_flist *second);
 int			mtime_cmp(t_flist *first, t_flist *second);
 int			reverse_cmp(t_flist *first, t_flist *second);
+int			filetype_cmp(t_flist *first, t_flist *second);
 
 typedef int				(*t_sorter)(t_flist *first, t_flist *second);
 static const t_sorter	g_compare[N_SORTF] = {
 	lex_cmp,
 	mtime_cmp,
-	reverse_cmp
+	reverse_cmp,
+	filetype_cmp,
 };
 
 // Merge sort implementation

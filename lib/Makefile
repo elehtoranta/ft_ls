@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/18 11:10:47 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/14 02:50:06 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/15 01:01:25 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ INCL		:= -Iincludes -I$(LIBFT_DIR)
 # The libft library is included from ./lib (see header)
 
 CC			:= gcc
-CFLAGS		:= -Wall -Werror -Wextra -O3
+CFLAGS		:= -Wall -Werror -Wextra -g
 RM			:= /bin/rm -rf
 
 

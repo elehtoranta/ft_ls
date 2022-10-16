@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:42:54 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 20:51:23 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/16 23:14:04 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,24 @@ static void	add_stat(t_flist *fnode, const char *dir, t_options *op)
 	free(path);
 }
 
-t_flist	*get_fnode(t_options *op, char *filename, const char *path)
+t_flist	*get_fnode(t_options *op, char *d_name, const char *path)
 {
 	t_flist	*fnode;
+	char	*filename;
 
+	if (d_name)
+		filename = ft_strdup(d_name);
+	else
+		filename = ft_basename(path);
 	if (!filename)
-		ls_critical_error("Invalid filename in get_fnode()");
+		ls_critical_error("Filename allocation failed");
 	fnode = init_fnode();
 	if (!fnode)
 		ls_critical_error("Initializing file node failed");
-	fnode->filename = ft_strdup(filename);
-	if (!fnode->filename)
-		ls_critical_error("Allocating memory to file name failed");
+	fnode->filename = filename;
 	if (errno == ENOMEM)
 		ls_critical_error("File name allocation failed");
-	if (op->options & (O_LONG | MASK_TIME | O_REC))
+	if (op->options & (O_LONG | MASK_TIME | O_REC | MODE_ARGLIST))
 		add_stat(fnode, path, op);
 	return (fnode);
 }
@@ -85,8 +88,29 @@ t_flist	*collect_flist(t_flist **head, DIR *dirp, \
 			continue ;
 		fnode = get_fnode(op, dirent->d_name, path);
 		if (*head == NULL)
+		{
 			*head = fnode;
-		last = append_flist(&last, fnode);
+			last = fnode;
+		}
+		else
+			last = append_flist(&last, fnode);
+	}
+	return (*head);
+}
+
+t_flist	*collect_arglist(t_flist **head, char **argv, t_options *op)
+{
+	t_flist	*fnode;
+
+	fnode = NULL;
+	while (*argv)
+	{
+		fnode = get_fnode(op, NULL, *argv);
+		fnode->path = ft_strdup(*argv);
+		if (!fnode->path)
+			ls_critical_error("Argument path allocation failed");
+		append_fnode(head, fnode);
+		argv++;
 	}
 	return (*head);
 }

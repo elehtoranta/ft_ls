@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/14 02:56:23 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/15 01:01:17 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ LIB		:= -L$(LIBDIR) -lftprintf
 INCL	:= -Iincludes -I$(LIBDIR)/includes -I$(LIBDIR)/libft
 
 CC		:= gcc
-CFLAGS	:= -Wall -Werror -Wextra -O3
+CFLAGS	:= -Wall -Werror -Wextra -g
 
 RM		:= /bin/rm -rf
 

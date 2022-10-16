@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 16:00:26 by elehtora          #+#    #+#             */
-/*   Updated: 2022/09/25 10:59:48 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/15 03:55:20 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ void		ft_strclr(char *s);
 void		ft_strrclr(char *s);
 void		ft_striter(char *s, void (*f)(char *));
 void		ft_striteri(char *s, void (*f)(unsigned int, char *));
+char		*ft_strip(const char *str, const char *charset);
+char		*ft_lstrip(const char *str, const char *charset);
+char		*ft_rstrip(const char *str, const char *charset);
 char		*ft_strmap(char const *s, char (*f)(char));
 char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char		*ft_strmodify(char const *initial, char *(*f)(char const *));
@@ -91,6 +94,7 @@ char		*ft_freejoin(const char *a, const char *b, uint8_t select);
 char		*ft_strtrim(char const *s);
 char		**ft_strsplit(char const *s, char c);
 size_t		ft_strspn(const char *s, const char *charset);
+size_t		ft_strcspn(const char *s, const char *charset);
 char		*ft_itoa(int n);
 char		*ft_ltoa_unsigned(unsigned long long n);
 char		*ft_ltoa(long long n);

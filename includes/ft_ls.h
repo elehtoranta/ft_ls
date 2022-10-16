@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/15 01:43:29 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/15 02:03:19 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # define RETURN_SHIFT	12
 # define E_MINOR		1
 # define E_MAJOR		2
+
+# define MODE_ARGLIST	0x8000
 
 // Options available. Expanded when adding supported options.
 # define OPTION_CHARS "lRart"
@@ -60,7 +62,7 @@ typedef struct group	t_group;
 // Bitfield formatting data
 typedef struct s_options
 {
-	uint16_t	options;
+	uint16_t		options;
 }	t_options;
 
 typedef struct s_longform
@@ -96,6 +98,7 @@ typedef struct s_flist
 {
 	t_stat			*stat;
 	char			*filename;
+	char			*path;
 	t_longform		*lform;
 	struct s_flist	*next;
 }	t_flist;
@@ -112,6 +115,7 @@ t_flist		*init_fnode(void);
 t_flist		*get_fnode(t_options *op, char *filename, const char *path);
 t_flist		*collect_flist(t_flist **head, DIR *dirp, \
 			const char *path, t_options *op);
+t_flist		*collect_arglist(t_flist **head, char **argv, t_options *op);
 t_flist		*append_fnode(t_flist **flist, t_flist *new);
 t_flist		*append_flist(t_flist **last, t_flist *new);
 void		pop_flist(t_flist **head);

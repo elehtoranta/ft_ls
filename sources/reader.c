@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/15 01:47:22 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/15 04:39:39 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	list(t_options *op, char *path, bool print_dirprefix)
 		{
 			if (stat.st_mode & S_IXUSR)
 			{
-				if (print_dirprefix== true)
+				if (print_dirprefix == true)
 					ft_printf("\n%s:\n", path);
 				list_dir(op, path);
 			}
@@ -107,6 +107,9 @@ void	list(t_options *op, char *path, bool print_dirprefix)
 
 void	list_args(t_options *op, char **argv, int argc)
 {
+	t_flist		*arglist;
+	t_options	arg_ops;
+
 	if (argc == 0)
 		list(op, ft_strdup("."), false);
 	if (argc == 1)
@@ -114,6 +117,16 @@ void	list_args(t_options *op, char **argv, int argc)
 		list(op, ft_strdup(*argv++), false);
 		argc--;
 	}
-	while (argc--)
-		list(op, ft_strdup(*argv++), true);
+	if (argc > 0)
+	{
+		arg_ops.options = MODE_ARGLIST;
+		arglist = NULL;
+		arglist = collect_arglist(&arglist, argv, &arg_ops);
+		sort(arglist, 0, S_FILETYPE);
+		while (argc--)
+		{
+			list(op, arglist->path, true);
+			arglist = arglist->next;
+		}
+	}
 }
