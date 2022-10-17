@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:42:54 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 22:31:14 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 00:03:37 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,11 @@ t_flist	*get_fnode(const char *path, t_options *op)
 
 	fnode = init_fnode();
 	if (!fnode)
-		ls_critical_error("Initializing file node failed");
+		ls_critical_error("initializing file node failed");
 	fnode->filename = ft_basename(path);
-	if (!fnode->filename)
-		ls_critical_error("Filename allocation failed");
+	fnode->path = ft_strdup(path);
+	if (!fnode->filename || !fnode->path)
+		ls_critical_error("filename or path allocation failed");
 	if (op->options & (O_LONG | MASK_TIME | O_REC | MODE_ARGLIST)) // TODO check need for MODE_ARGLIST
 		add_stat(fnode, path, op);
 	return (fnode);
