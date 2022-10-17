@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 04:19:54 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:44:59 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,15 +106,13 @@ typedef struct s_flist
 char		**parse_options(t_options *op, char **argv, int *argc);
 void		select_time_mode(t_options *op);
 
-void		list(t_options *op, char *path, bool print_dirprefix);
-void		list_args(t_options *op, char **argv, int argc);
+void		list(char *path, t_options *op, bool print_dirprefix);
+void		list_args(char **argv, int argc, t_options *op);
 
 // File list functions
 t_flist		*init_fnode(void);
-t_flist		*get_fnode(t_options *op, char *filename, const char *path);
-t_flist		*collect_flist(t_flist **head, DIR *dirp, \
-			const char *path, t_options *op);
-t_flist		*collect_arglist(t_flist **head, char **argv, t_options *op);
+t_flist		*get_fnode(const char *path, t_options *op);
+t_flist		*collect_flist(DIR *dirp, const char *path, t_options *op);
 t_flist		*append_fnode(t_flist **flist, t_flist *new);
 t_flist		*append_flist(t_flist **last, t_flist *new);
 void		pop_flist(t_flist **head);
@@ -127,7 +125,7 @@ void		get_unique_forms(t_flist *fnode);
 void		get_common_widths(t_fwidths *fwidths, t_flist *flist);
 
 // Output formatter
-void		format(t_options *op, t_flist *flist, const char *path);
+void		format(t_flist *flist, const char *path, t_options *op);
 
 // Permission handler
 void		print_permissions(t_flist *fnode);

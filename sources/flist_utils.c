@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:42:54 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 04:32:24 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:31:14 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,10 @@ size_t	len_flist(t_flist *flist)
 	return (len);
 }
 
-static void	add_stat(t_flist *fnode, const char *dir, t_options *op)
+static void	add_stat(t_flist *fnode, const char *path, t_options *op)
 {
 	t_stat	stat;
-	char	*path;
 
-	path = ft_strdjoin(dir, "/", fnode->filename);
-	if (!path)
-		ls_critical_error("Path allocation failed");
 	if (lstat(path, &stat) == -1)
 	{
 		ls_read_error("", fnode->filename, op, E_MINOR);
@@ -42,59 +38,53 @@ static void	add_stat(t_flist *fnode, const char *dir, t_options *op)
 	{
 		fnode->stat = (t_stat *)malloc(sizeof(stat));
 		if (!fnode->stat && errno == ENOMEM)
-			ls_critical_error("Stat allocation failed");
+			ls_critical_error("stat allocation failed");
 		ft_memcpy(fnode->stat, &stat, sizeof(stat));
 	}
-	free(path);
 }
 
-t_flist	*get_fnode(t_options *op, char *d_name, const char *path)
+t_flist	*get_fnode(const char *path, t_options *op)
 {
 	t_flist	*fnode;
-	char	*filename;
 
-	if (d_name)
-		filename = ft_strdup(d_name);
-	else
-		filename = ft_basename(path);
-	if (!filename)
-		ls_critical_error("Filename allocation failed");
 	fnode = init_fnode();
 	if (!fnode)
 		ls_critical_error("Initializing file node failed");
-	fnode->filename = filename;
-	if (errno == ENOMEM)
-		ls_critical_error("File name allocation failed");
-	if (op->options & (O_LONG | MASK_TIME | O_REC | MODE_ARGLIST))
+	fnode->filename = ft_basename(path);
+	if (!fnode->filename)
+		ls_critical_error("Filename allocation failed");
+	if (op->options & (O_LONG | MASK_TIME | O_REC | MODE_ARGLIST)) // TODO check need for MODE_ARGLIST
 		add_stat(fnode, path, op);
 	return (fnode);
 }
 
-t_flist	*collect_flist(t_flist **head, DIR *dirp, \
-		const char *path, t_options *op)
+t_flist	*collect_flist(DIR *dirp, const char *dirname, t_options *op)
 {
-	t_flist		*fnode;
-	t_flist		*last;
+	t_flist		*flist;
 	t_dirent	*dirent;
+	char		*basename;
+	char		*path;
 
-	last = NULL;
+	flist = NULL;
+	basename = NULL;
+	path = NULL;
+	// This can be put into get_dirent() if needed
 	while (1)
 	{
 		dirent = readdir(dirp);
 		if (errno == EBADF)
 			ls_critical_error("Reading directory stream failed");
 		if (!dirent)
-			return (*head);
+			return (flist);
 		if (dirent->d_name[0] == '.' && !(op->options & O_ALL))
 			continue ;
-		fnode = get_fnode(op, dirent->d_name, path);
-		if (*head == NULL)
-		{
-			*head = fnode;
-			last = fnode;
-		}
-		else
-			last = append_flist(&last, fnode);
+		basename = ft_strdup(dirent->d_name); // Check multiple slashes
+		if (!basename)
+			ls_critical_error("allocating basename failed");
+		path = ft_join_path((char *)dirname, basename); // TODO If erroneus output on multiple slashes, use strdjoin
+		if (!path)
+			ls_critical_error("allocating path failed");
+		append_fnode(&flist, get_fnode(path, op));
 	}
-	return (*head);
+	return (flist);
 }

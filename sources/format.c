@@ -6,13 +6,13 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 04:27:18 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:43:18 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	format(t_options *op, t_flist *flist, const char *path)
+void	format(t_flist *flist, const char *path, t_options *op)
 {
 	if (op->options & O_LONG)
 	{

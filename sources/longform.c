@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 19:59:33 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 04:41:12 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 05:34:12 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,17 @@ static void	output_date(time_t format_time)
 /* Checks a symbolic link for permissions and prints a result if
  * one is found.
  */
-static void	resolve_link(t_flist *fnode, const char *base, t_options *op)
+static void	resolve_link(t_flist *fnode, const char *dir, t_options *op)
 {
-	char	*path;
 	char	buf[READLINK_BUFSIZE];
+	char	*path;
 
-	path = ft_strdjoin(base, "/", fnode->filename);
-	if (!path)
-		ls_critical_error("Path allocation failed");
 	ft_bzero(buf, READLINK_BUFSIZE);
+	path = ft_join_path((char *)dir, fnode->filename);
 	if (readlink(path, buf, READLINK_BUFSIZE) == -1)
-		ls_read_error("\n", fnode->filename, op, E_MINOR);
+		ls_read_error("", fnode->filename, op, E_MINOR);
 	else
 		ft_printf(" -> %s", buf);
-	free(path);
 }
 
 /* Prints out the size block. If the file pointed to is a character
