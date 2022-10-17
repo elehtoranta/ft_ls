@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/16 21:02:34 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 01:55:30 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 00:31:06 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
  */
 char	*ft_join_path(char *dirname, char *basename)
 {
+	char	*path;
+
 	if (!dirname && !basename)
 		return (NULL);
 	if (!dirname || ft_strequ(dirname, ""))
@@ -33,5 +35,7 @@ char	*ft_join_path(char *dirname, char *basename)
 	dirname = ft_rstrip(dirname, "/");
 	if (!dirname)
 		return (NULL);
-	return (ft_strdjoin(dirname, "/", basename));
+	path = ft_strdjoin(dirname, "/", basename);
+	free(dirname);
+	return (path);
 }
