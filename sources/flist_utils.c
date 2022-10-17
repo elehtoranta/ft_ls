@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:42:54 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 00:03:37 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 02:20:59 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_flist	*get_fnode(const char *path, t_options *op)
 	fnode->path = ft_strdup(path);
 	if (!fnode->filename || !fnode->path)
 		ls_critical_error("filename or path allocation failed");
-	if (op->options & (O_LONG | MASK_TIME | O_REC | MODE_ARGLIST)) // TODO check need for MODE_ARGLIST
+	if (op->options & (O_LONG | MASK_TIME | O_REC | MODE_ARGLIST))
 		add_stat(fnode, path, op);
 	return (fnode);
 }
@@ -69,7 +69,6 @@ t_flist	*collect_flist(DIR *dirp, const char *dirname, t_options *op)
 	flist = NULL;
 	basename = NULL;
 	path = NULL;
-	// This can be put into get_dirent() if needed
 	while (1)
 	{
 		dirent = readdir(dirp);
@@ -79,13 +78,11 @@ t_flist	*collect_flist(DIR *dirp, const char *dirname, t_options *op)
 			return (flist);
 		if (dirent->d_name[0] == '.' && !(op->options & O_ALL))
 			continue ;
-		basename = ft_strdup(dirent->d_name); // Check multiple slashes
-		if (!basename)
-			ls_critical_error("allocating basename failed");
-		path = ft_join_path((char *)dirname, basename); // TODO If erroneus output on multiple slashes, use strdjoin
+		path = ft_join_path((char *)dirname, dirent->d_name);
 		if (!path)
 			ls_critical_error("allocating path failed");
 		append_fnode(&flist, get_fnode(path, op));
+		free(path);
 	}
 	return (flist);
 }

@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 19:59:33 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 05:34:12 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 02:09:48 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,11 @@ static void	output_date(time_t format_time)
 /* Checks a symbolic link for permissions and prints a result if
  * one is found.
  */
-static void	resolve_link(t_flist *fnode, const char *dir, t_options *op)
+static void	resolve_link(t_flist *fnode, const char *path, t_options *op)
 {
 	char	buf[READLINK_BUFSIZE];
-	char	*path;
 
 	ft_bzero(buf, READLINK_BUFSIZE);
-	path = ft_join_path((char *)dir, fnode->filename);
 	if (readlink(path, buf, READLINK_BUFSIZE) == -1)
 		ls_read_error("", fnode->filename, op, E_MINOR);
 	else
@@ -89,7 +87,7 @@ static void	print_sizeblock(t_flist *fnode, t_fwidths *fwidths)
 /* Gets, formats and prints the long listing format notation
  * of the collected files.
  */
-void	print_longform(t_flist *flist, t_options *op, const char *path)
+void	print_longform(t_flist *flist, t_options *op)
 {
 	t_fwidths	fwidths;
 
@@ -107,7 +105,7 @@ void	print_longform(t_flist *flist, t_options *op, const char *path)
 			output_date(get_time(flist, op));
 			ft_printf(" %s", flist->filename);
 			if ((flist->stat->st_mode & S_IFMT) == S_IFLNK)
-				resolve_link(flist, path, op);
+				resolve_link(flist, flist->path, op);
 			ft_printf("\n");
 		}
 		flist = flist->next;

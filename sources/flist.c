@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 11:40:58 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 00:06:09 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 02:18:42 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ t_flist	*init_fnode(void)
  */
 t_flist	*append_fnode(t_flist **flist, t_flist *new)
 {
-	// TODO Check what's the pointer value of flist at *flist == NULL
 	t_flist	*rest;
 	t_flist	*current;
 

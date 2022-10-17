@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 23:49:22 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 02:02:40 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void		delete_flist(t_flist **head);
 size_t		len_flist(t_flist *flist);
 
 // Long format information gathering
-void		print_longform(t_flist *flist, t_options *op, const char *path);
+void		print_longform(t_flist *flist, t_options *op);
 void		get_unique_forms(t_flist *fnode);
 void		get_common_widths(t_fwidths *fwidths, t_flist *flist);
 

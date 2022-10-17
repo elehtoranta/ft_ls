@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 00:07:11 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 02:23:38 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void	list_file(const char *path, t_options *op)
 /* Dispatches for a single file or directory listing function,
  * based on file mode information from lstat(3).
  */
-void	list(char *path, t_options *op, bool print_dirprefix)
+void	list(char *path, t_options *op, bool print_dirprefix) // TODO Change print_dirprefix to a bit option (set in list_args)
 {
 	t_stat	stat;
 
