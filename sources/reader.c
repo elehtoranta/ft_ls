@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/15 04:39:39 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 03:34:39 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,30 @@ void	list(t_options *op, char *path, bool print_dirprefix)
 	free(path);
 }
 
+static void	loop_args(char **argv, int argc, t_options *op, int choose)
+{
+	t_stat	stat;
+
+	while (argc--)
+	{
+		if (lstat(*argv, &stat) == -1)
+			ls_read_error("", *argv, op, E_MAJOR);
+		else if (choose == S_IFREG)
+		{
+			if ((stat.st_mode & S_IFMT) != S_IFDIR)
+				list(op, ft_strdup(*argv), true);
+		}
+		else
+		{
+			if ((stat.st_mode & S_IFMT) == S_IFDIR)
+				list(op, ft_strdup(*argv), true);
+		}
+		argv++;
+	}
+}
+
 void	list_args(t_options *op, char **argv, int argc)
 {
-	t_flist		*arglist;
-	t_options	arg_ops;
-
 	if (argc == 0)
 		list(op, ft_strdup("."), false);
 	if (argc == 1)
@@ -119,14 +138,7 @@ void	list_args(t_options *op, char **argv, int argc)
 	}
 	if (argc > 0)
 	{
-		arg_ops.options = MODE_ARGLIST;
-		arglist = NULL;
-		arglist = collect_arglist(&arglist, argv, &arg_ops);
-		sort(arglist, 0, S_FILETYPE);
-		while (argc--)
-		{
-			list(op, arglist->path, true);
-			arglist = arglist->next;
-		}
+		loop_args(argv, argc, op, S_IFREG);
+		loop_args(argv, argc, op, S_IFDIR);
 	}
 }

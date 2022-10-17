@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 03:48:55 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/15 04:29:31 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 01:55:05 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,3 @@ char	*ft_strip(const char *str, const char *charset)
 		end--;
 	return (ft_strndup(start, end - start + 1));
 }
-

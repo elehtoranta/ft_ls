@@ -6,28 +6,34 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:38:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/03/03 18:43:31 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/16 19:54:36 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include "ft_string.h"
 
-static int	ft_isdigit(long int n)
+static int	ft_digit(long int n)
 {
 	return (-9 <= n && n <= 9);
 }
 
-void	ft_putnbr_fd(int n, int fd)
+int	ft_putnbr_fd(int n, int fd)
 {
 	long int	ln;
 
 	ln = (long int) n;
-	if (!ft_isdigit(ln))
+	if (!ft_digit(ln))
 		ft_putnbr_fd(((int)ln - ((int)ln % 10)) / 10, fd);
 	else if (ln < 0)
-		write(fd, "-", 1);
+	{
+		if (write(fd, "-", 1) == -1)
+			return (EOF);
+	}
 	if (ln < 0)
 		ln *= (-1);
 	ln = ln % 10 + '0';
-	write(fd, &ln, 1);
+	if (write(fd, &ln, 1) == -1)
+		return (EOF);
+	return (0);
 }

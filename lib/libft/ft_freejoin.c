@@ -6,12 +6,12 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 03:01:42 by elehtora          #+#    #+#             */
-/*   Updated: 2022/09/25 03:06:02 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 03:23:51 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "libft.h"
+#include "ft_string.h"
 
 // Frees memory allocated to either or both strings, and joins them together,
 // returning a newly allocated concatenation of a and b.

@@ -6,16 +6,17 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/23 15:55:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/23 15:56:38 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/16 19:55:12 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_string.h"
+#include <stdint.h>
 
-void	ft_putbits(void *var, uint8_t bytes)
+int	ft_putbits(void *var, unsigned int bytes)
 {
 	const uint64_t	printvar = *(uint64_t *)var;
-	uint8_t			shift;
+	unsigned int	shift;
 
 	shift = bytes * 8;
 	while (shift-- > 0)
@@ -29,5 +30,6 @@ void	ft_putbits(void *var, uint8_t bytes)
 		if ((shift) % 8 == 0 && shift)
 			ft_putchar(' ');
 	}
-	ft_putendl("");
+	ft_putchar('\n');
+	return (0);
 }

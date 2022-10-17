@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
+/*   ft_strarrlen.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/11 16:13:14 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/16 19:50:34 by elehtora         ###   ########.fr       */
+/*   Created: 2022/09/14 16:47:20 by elehtora          #+#    #+#             */
+/*   Updated: 2022/09/14 17:08:15 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include "ft_string.h"
+#include <string.h>
 
-int	ft_putchar_fd(int c, int fd)
+/*
+ * Gets the length of a string array (array of char *). The counting is done
+ * until a NULL pointer is found, therefore the array MUST be NULL terminated.
+ *
+ * Returns the amount of strings found.
+ */
+int	ft_strarrlen(char **str_array)
 {
-	if (write(fd, &c, 1) == -1)
-		return (EOF);
-	return (c);
+	int	count;
+
+	count = 0;
+	while (*str_array != NULL)
+	{
+		count++;
+		str_array++;
+	}
+	return (count);
 }
