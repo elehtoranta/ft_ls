@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 00:58:39 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/14 01:42:39 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 04:59:52 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
  * Time of modification is the default.
  *
  * NOTE: Only modification time (-t) is implemented as of now, see ft_ls.h.
+ * Now this looks just silly.
  */
 void	select_time_mode(t_options *op)
 {

@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:42:54 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/16 23:14:04 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 04:32:24 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ static void	add_stat(t_flist *fnode, const char *dir, t_options *op)
 	{
 		ls_read_error("", fnode->filename, op, E_MINOR);
 		fnode->stat = NULL;
-		free(path);
-		return ;
 	}
-	fnode->stat = (t_stat *)malloc(sizeof(stat));
-	if (!fnode->stat && errno == ENOMEM)
-		ls_critical_error("Stat allocation failed");
-	ft_memcpy(fnode->stat, &stat, sizeof(stat));
+	else
+	{
+		fnode->stat = (t_stat *)malloc(sizeof(stat));
+		if (!fnode->stat && errno == ENOMEM)
+			ls_critical_error("Stat allocation failed");
+		ft_memcpy(fnode->stat, &stat, sizeof(stat));
+	}
 	free(path);
 }
 
@@ -94,23 +95,6 @@ t_flist	*collect_flist(t_flist **head, DIR *dirp, \
 		}
 		else
 			last = append_flist(&last, fnode);
-	}
-	return (*head);
-}
-
-t_flist	*collect_arglist(t_flist **head, char **argv, t_options *op)
-{
-	t_flist	*fnode;
-
-	fnode = NULL;
-	while (*argv)
-	{
-		fnode = get_fnode(op, NULL, *argv);
-		fnode->path = ft_strdup(*argv);
-		if (!fnode->path)
-			ls_critical_error("Argument path allocation failed");
-		append_fnode(head, fnode);
-		argv++;
 	}
 	return (*head);
 }

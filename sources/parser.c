@@ -6,12 +6,17 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:44 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/14 01:56:40 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 04:49:29 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
+/* Matches an option from string 'OPTION_CHARS' to it's place in the bitfield
+ * 'options'. The char * position is used to index the option_bitflags array,
+ * as the OPTION_CHARS provides the corresponding chars in the same order as
+ * they're listed in the array.
+ */
 static void	match_option(t_options *op, char *c_option)
 {
 	static const uint16_t	option_bitflags[N_OPTIONS] = {
@@ -26,6 +31,9 @@ static void	match_option(t_options *op, char *c_option)
 		op->options |= option_bitflags[index];
 }
 
+/* Traverses the option argument and calls a matcher to set the correct
+ * bits in the option bitfield.
+ */
 static void	set_options(const char *option_string, t_options *op)
 {
 	char		*c_option;
@@ -41,6 +49,9 @@ static void	set_options(const char *option_string, t_options *op)
 	select_time_mode(op);
 }
 
+/* Prints usage on incorrect options and exits with a minor error
+ * code 1.
+ */
 static void	print_usage(const char nonvalid_char)
 {
 	ft_printf("ft_ls: illegal option -- %c\n", nonvalid_char);

@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:03:14 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 20:51:44 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 04:44:56 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ static t_longform	*init_lform(void)
 	return (lform);
 }
 
+/* Gets the file owner's name.
+ */
 static void	get_user(t_longform *lform, t_flist *fnode)
 {
 	t_passwd	*passwd;
@@ -42,6 +44,8 @@ static void	get_user(t_longform *lform, t_flist *fnode)
 		lform->author = ft_strdup(passwd->pw_name);
 }
 
+/* Gets the file group name.
+ */
 static void	get_group(t_longform *lform, t_flist *fnode)
 {
 	t_group		*group;
@@ -53,12 +57,18 @@ static void	get_group(t_longform *lform, t_flist *fnode)
 		lform->group = ft_strdup(group->gr_name);
 }
 
+/* Gets the device id numbers. These are used in the place of file size
+ * in specified cases.
+ */
 static void	get_device_id(t_flist *fnode, t_longform *lform)
 {
 	lform->major = (fnode->stat->st_rdev & (MAJOR_MASK)) >> 24;
 	lform->minor = (fnode->stat->st_rdev & (MINOR_MASK));
 }
 
+/* Gets the data unique to each file (as opposed to common, as parent
+ * directory, field width in formatting, etc.)
+ */
 void	get_unique_forms(t_flist *fnode)
 {
 	t_longform	*lform;

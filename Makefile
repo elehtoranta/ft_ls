@@ -6,27 +6,28 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/29 13:01:10 by elehtora          #+#    #+#              #
-#    Updated: 2022/10/15 01:01:17 by elehtora         ###   ########.fr        #
+#    Updated: 2022/10/17 04:15:50 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	:= ft_ls
 
 SRCDIR	:= sources
-SRCS	:= main.c \
-		   parser.c \
-		   time.c \
-		   reader.c \
-		   sort.c \
+SRCS	:= args.c \
+		   main.c \
+		   comparisons.c \
+		   error.c \
 		   flist.c \
 		   flist_utils.c \
 		   format.c \
-		   permissions.c \
-		   comparisons.c \
 		   longform.c \
 		   longform_common.c \
 		   longform_unique.c \
-		   error.c
+		   parser.c \
+		   permissions.c \
+		   reader.c \
+		   sort.c \
+		   time.c
 
 OBJDIR	:= objects
 OBJS	:= $(SRCS:.c=.o)

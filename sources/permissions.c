@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 03:53:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 21:05:21 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 04:50:17 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,9 @@ static void	set_filetype(t_flist *fnode, char *buf)
 	}
 }
 
+/* Outputs the permission string at the start of every long
+ * listing formatting string.
+ */
 void	print_permissions(t_flist *fnode)
 {
 	char	permission_buf[PERMS_FW + 1];

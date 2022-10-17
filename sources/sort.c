@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 02:11:16 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/14 02:11:20 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 04:58:44 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ t_flist	*sort(t_flist *flist, uint16_t options, uint8_t mode)
 	return (flist);
 }
 
+/* A merge sort implementation, that acts on t_flist types. After dividing
+ * the given list to sublists of one node, it utilizes ls_merge to apply one
+ * of the comparison functions (see sorting.h; comparison.c) to the sublists
+ * while ascending the recursion tree.
+ */
 t_flist	*ls_mergesort(t_flist *flist, size_t len, uint8_t mode)
 {
 	const int	remainder = len % 2;

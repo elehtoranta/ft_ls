@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/15 02:03:19 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 04:19:54 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ typedef struct s_flist
 {
 	t_stat			*stat;
 	char			*filename;
-	char			*path;
 	t_longform		*lform;
 	struct s_flist	*next;
 }	t_flist;

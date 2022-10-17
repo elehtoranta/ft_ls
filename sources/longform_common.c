@@ -6,12 +6,14 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:05:31 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/13 20:40:32 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/17 04:41:34 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
+/* Initialize long format field width struct.
+ */
 static void	init_fwidths(t_fwidths *fwidths)
 {
 	fwidths->links_len = 0;
