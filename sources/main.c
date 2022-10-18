@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:26:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 22:42:45 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 03:25:55 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static void	init_options(t_options *op)
 {
-	op->options = 0;
+	op->options = 0x0;
+	op->error = 0x0;
 }
 
 int	main(int argc, char **argv)
@@ -24,5 +25,5 @@ int	main(int argc, char **argv)
 	init_options(&options);
 	argv = parse_options(&options, &argv[1], &argc);
 	list_args(argv, argc, &options);
-	return (options.options >> RETURN_SHIFT);
+	return (options.error);
 }

@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 04:14:59 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 02:18:14 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 03:47:39 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	distribute_arglist(t_flist *flist, t_options *op)
 {
 	while (flist)
 	{
-		list(flist->path, op, true);
+		list(flist->path, op);
 		flist = flist->next;
 	}
 }
@@ -59,12 +59,17 @@ static void	list_arglists(char **argv, int argc, t_options *op)
 void	list_args(char **argv, int argc, t_options *op)
 {
 	if (argc == 0)
-		list(".", op, false);
+		list(".", op);
 	if (argc == 1)
 	{
-		list(*argv++, op, false);
+		list(*argv++, op);
 		argc--;
 	}
+	/*if (op->options & O_REC)*/
+		/*op->options |= MODE_NAMEDIRS;*/
 	if (argc > 0)
+	{
+		op->options |= MODE_NAMEDIRS;
 		list_arglists(argv, argc, op);
+	}
 }

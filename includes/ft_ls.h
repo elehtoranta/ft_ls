@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 02:02:40 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 03:22:17 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@
 # include "ft_printf.h"
 
 // Return values. 0 (success) is returned when !(E_MINOR | E_MAJOR)
-# define RETURN_SHIFT	12
 # define E_MINOR		1
 # define E_MAJOR		2
 
-# define MODE_ARGLIST	0x8000
+# define MODE_NAMEDIRS	0x2000
+# define MODE_ARGLIST	0x4000
 
 // Options available. Expanded when adding supported options.
 # define OPTION_CHARS "lRart"
@@ -63,6 +63,7 @@ typedef struct group	t_group;
 typedef struct s_options
 {
 	uint16_t		options;
+	uint8_t			error;
 }	t_options;
 
 typedef struct s_longform
@@ -107,7 +108,7 @@ typedef struct s_flist
 char		**parse_options(t_options *op, char **argv, int *argc);
 void		select_time_mode(t_options *op);
 
-void		list(char *path, t_options *op, bool print_dirprefix);
+void		list(char *path, t_options *op);
 void		list_args(char **argv, int argc, t_options *op);
 
 // File list functions
@@ -121,12 +122,12 @@ void		delete_flist(t_flist **head);
 size_t		len_flist(t_flist *flist);
 
 // Long format information gathering
-void		print_longform(t_flist *flist, t_options *op);
+void		print_longform(t_flist *flist, t_options *op, char type);
 void		get_unique_forms(t_flist *fnode);
 void		get_common_widths(t_fwidths *fwidths, t_flist *flist);
 
 // Output formatter
-void		format(t_flist *flist, const char *path, t_options *op);
+void		format(t_flist *flist, t_options *op, char type);
 
 // Permission handler
 void		print_permissions(t_flist *fnode);

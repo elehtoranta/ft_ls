@@ -6,17 +6,17 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 02:04:25 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 22:43:18 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 03:50:34 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	format(t_flist *flist, const char *path, t_options *op)
+void	format(t_flist *flist, t_options *op, char type)
 {
 	if (op->options & O_LONG)
 	{
-		print_longform(flist, op, path);
+		print_longform(flist, op, type);
 	}
 	else
 	{
