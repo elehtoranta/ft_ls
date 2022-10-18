@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 03:48:55 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/17 01:55:05 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 06:26:42 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ char	*ft_lstrip(const char *str, const char *charset)
 
 char	*ft_rstrip(const char *str, const char *charset)
 {
+	const char	*start = (const char *)str;
 	const char	*end = ft_strchr(str, '\0') - 1;
 
-	while (ft_strchr(charset, *end))
+	while (ft_strchr(charset, *end) && end != start)
 		end--;
 	return (ft_strndup(str, end - str + 1));
 }

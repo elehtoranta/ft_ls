@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:28:36 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 03:22:17 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 06:13:38 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 # define FT_LS_H
 
 # include <stdlib.h>
-# include <stdio.h>
+//# include <stdio.h>
 # include <stdint.h>
-# include <stdbool.h>
 # include <dirent.h>
 # include <errno.h>
 # include <sys/stat.h>
@@ -41,17 +40,15 @@
 # define O_REV		0x0008
 # define O_TIME		0x0010
 
-// Time based sorting options (MODIFIED IF OPTIONS ARE ADDED)
-# define MASK_TIME	0x0F00
-# define O_MTIME	0x0100
-//# define O_ATIME		0x0200
-//# define O_BTIME		0x0300
-//# define O_CTIME		0x0400
 
 // Masking for time option selected. The time displayed in
 // long format can represent time modified, created or last
 // accessed, of which only the first is an implemented
-// sorting option here
+// sorting option here.
+//
+// Time based sorting options (MODIFIED IF OPTIONS ARE ADDED)
+# define MASK_TIME	0x0F00
+# define O_MTIME	0x0100
 
 // Aliasing to reduce typing 'struct' every time on use
 typedef struct stat		t_stat;
