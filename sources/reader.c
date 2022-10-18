@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 03:46:47 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 04:15:43 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	list_dir(const char *path, t_options *op)
 			get_unique_forms(flist);
 		flist = sort(flist, op->options, 0);
 		if (op->options & MODE_NAMEDIRS)
-			ft_printf("%s:\n", path);
+			ft_printf("\n%s:\n", path);
 		format(flist, op, 'd');
 		if (op->options & O_REC)
 			recurse_directories(flist, path, op);
@@ -94,10 +94,7 @@ void	list(char *path, t_options *op)
 		if ((stat.st_mode & S_IFMT) == S_IFDIR)
 		{
 			if (stat.st_mode & S_IXUSR)
-			{
 				list_dir(path, op);
-				// FIXME spacing between dirs
-			}
 		}
 		else
 			list_file(path, op);

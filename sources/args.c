@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 04:14:59 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 03:47:39 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 04:46:42 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ static void	list_arglists(char **argv, int argc, t_options *op)
 
 void	list_args(char **argv, int argc, t_options *op)
 {
+	if (op->options & O_REC)
+		op->options |= MODE_NAMEDIRS;
 	if (argc == 0)
 		list(".", op);
 	if (argc == 1)
@@ -65,8 +67,6 @@ void	list_args(char **argv, int argc, t_options *op)
 		list(*argv++, op);
 		argc--;
 	}
-	/*if (op->options & O_REC)*/
-		/*op->options |= MODE_NAMEDIRS;*/
 	if (argc > 0)
 	{
 		op->options |= MODE_NAMEDIRS;
