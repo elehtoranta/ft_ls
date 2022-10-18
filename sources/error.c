@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 23:54:37 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 02:50:56 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 04:28:07 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	ls_critical_error(const char *errormsg)
 void	ls_read_error(const char *message, const char *path, \
 		t_options *op, int status)
 {
-	op->error = status;
+	if (status > op->error)
+		op->error = status;
 	ft_printf("ft_ls: %s%s: ", message, path);
 	perror("");
 }
