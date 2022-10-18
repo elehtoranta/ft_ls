@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 04:15:43 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 13:07:12 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,7 @@ void	list(char *path, t_options *op)
 	else
 	{
 		if ((stat.st_mode & S_IFMT) == S_IFDIR)
-		{
-			if (stat.st_mode & S_IXUSR)
-				list_dir(path, op);
-		}
+			list_dir(path, op);
 		else
 			list_file(path, op);
 	}
