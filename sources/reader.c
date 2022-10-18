@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 02:23:38 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 04:13:14 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ static void	recurse_directories(t_flist *flist, const char *path, t_options *op)
 			dirpath = ft_join_path((char *)path, flist->filename);
 			if (!dirpath)
 				ls_critical_error("Path name allocation failed");
-			list(dirpath, op, true);
+			list(dirpath, op);
+			free(dirpath);
 		}
 		flist = flist->next;
 	}
@@ -55,7 +56,9 @@ void	list_dir(const char *path, t_options *op)
 		if (op->options & (O_LONG | O_TIME))
 			get_unique_forms(flist);
 		flist = sort(flist, op->options, 0);
-		format(flist, path, op);
+		if (op->options & MODE_NAMEDIRS)
+			ft_printf("\n%s:\n", path);
+		format(flist, op, 'd');
 		if (op->options & O_REC)
 			recurse_directories(flist, path, op);
 		delete_flist(&flist);
@@ -73,14 +76,14 @@ static void	list_file(const char *path, t_options *op)
 	fnode = get_fnode(path, op);
 	if (op->options & O_LONG)
 		get_unique_forms(fnode);
-	format(fnode, path, op);
+	format(fnode, op, 'f');
 	delete_flist(&fnode);
 }
 
 /* Dispatches for a single file or directory listing function,
  * based on file mode information from lstat(3).
  */
-void	list(char *path, t_options *op, bool print_dirprefix) // TODO Change print_dirprefix to a bit option (set in list_args)
+void	list(char *path, t_options *op)
 {
 	t_stat	stat;
 
@@ -91,11 +94,7 @@ void	list(char *path, t_options *op, bool print_dirprefix) // TODO Change print_
 		if ((stat.st_mode & S_IFMT) == S_IFDIR)
 		{
 			if (stat.st_mode & S_IXUSR)
-			{
-				if (print_dirprefix == true)
-					ft_printf("\n%s:\n", path);
 				list_dir(path, op);
-			}
 		}
 		else
 			list_file(path, op);

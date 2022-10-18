@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:42:54 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 02:20:59 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 03:36:02 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ t_flist	*get_fnode(const char *path, t_options *op)
 	fnode->path = ft_strdup(path);
 	if (!fnode->filename || !fnode->path)
 		ls_critical_error("filename or path allocation failed");
-	if (op->options & (O_LONG | MASK_TIME | O_REC | MODE_ARGLIST))
-		add_stat(fnode, path, op);
+	add_stat(fnode, path, op);
 	return (fnode);
 }
 

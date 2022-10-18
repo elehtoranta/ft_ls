@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 19:59:33 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 02:09:48 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 03:48:24 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,13 @@ static void	print_sizeblock(t_flist *fnode, t_fwidths *fwidths)
 /* Gets, formats and prints the long listing format notation
  * of the collected files.
  */
-void	print_longform(t_flist *flist, t_options *op)
+void	print_longform(t_flist *flist, t_options *op, char type)
 {
 	t_fwidths	fwidths;
 
 	get_common_widths(&fwidths, flist);
-	ft_printf("total %lu\n", fwidths.total_blocks);
+	if (type == 'd')
+		ft_printf("total %lu\n", fwidths.total_blocks);
 	while (flist)
 	{
 		if (flist->stat != NULL)
