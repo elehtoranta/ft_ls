@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:42:54 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 03:36:02 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 05:57:16 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,9 @@ t_flist	*collect_flist(DIR *dirp, const char *dirname, t_options *op)
 {
 	t_flist		*flist;
 	t_dirent	*dirent;
-	char		*basename;
 	char		*path;
 
 	flist = NULL;
-	basename = NULL;
 	path = NULL;
 	while (1)
 	{
