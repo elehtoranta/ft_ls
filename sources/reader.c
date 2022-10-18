@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 11:18:09 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 13:07:12 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 15:11:02 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ void	list_dir(const char *path, t_options *op)
 	if (!dirp)
 		return (ls_read_error("", path, op, E_MINOR));
 	flist = collect_flist(dirp, path, op);
+	if (op->options & MODE_NAMEDIRS)
+		ft_printf("\n%s:\n", path);
 	if (flist)
 	{
 		if (op->options & (O_LONG | O_TIME))
 			get_unique_forms(flist);
 		flist = sort(flist, op->options, 0);
-		if (op->options & MODE_NAMEDIRS)
-			ft_printf("\n%s:\n", path);
 		format(flist, op, 'd');
 		if (op->options & O_REC)
 			recurse_directories(flist, path, op);
