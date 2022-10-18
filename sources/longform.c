@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 19:59:33 by elehtora          #+#    #+#             */
-/*   Updated: 2022/10/18 03:48:24 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/10/18 05:29:55 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,19 @@ static void	output_date(time_t format_time)
 static void	resolve_link(t_flist *fnode, const char *path, t_options *op)
 {
 	char	buf[READLINK_BUFSIZE];
+	char	*tmp;
 
 	ft_bzero(buf, READLINK_BUFSIZE);
 	if (readlink(path, buf, READLINK_BUFSIZE) == -1)
 		ls_read_error("", fnode->filename, op, E_MINOR);
 	else
-		ft_printf(" -> %s", buf);
+	{
+		tmp = fnode->filename;
+		fnode->filename = ft_strdjoin(fnode->filename, " -> ", buf);
+		if (!fnode->filename)
+			ls_critical_error("filename allocation failed");
+		free(tmp);
+	}
 }
 
 /* Prints out the size block. If the file pointed to is a character
@@ -98,6 +105,8 @@ void	print_longform(t_flist *flist, t_options *op, char type)
 	{
 		if (flist->stat != NULL)
 		{
+			if ((flist->stat->st_mode & S_IFMT) == S_IFLNK)
+				resolve_link(flist, flist->path, op);
 			print_permissions(flist);
 			ft_printf("%*u ", fwidths.links_len, flist->stat->st_nlink);
 			ft_printf("%-*s  ", fwidths.author_len, flist->lform->author);
@@ -105,8 +114,6 @@ void	print_longform(t_flist *flist, t_options *op, char type)
 			print_sizeblock(flist, &fwidths);
 			output_date(get_time(flist, op));
 			ft_printf(" %s", flist->filename);
-			if ((flist->stat->st_mode & S_IFMT) == S_IFLNK)
-				resolve_link(flist, flist->path, op);
 			ft_printf("\n");
 		}
 		flist = flist->next;
