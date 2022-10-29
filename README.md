@@ -11,11 +11,15 @@ Similarly, it's an *exercise in error handling*: the UNIX file system has multip
 *Good design* from the get-go was suggested, in which I initially succeeded well.
 
 ## Learning outcomes
-1. **Reading manuals is fun (because it's necessary)**
+1. **UNIX file system & permissions**
+
+	As an introductory project to UNIX programming, the project was the first to really dive into the workings of UNIX concerning its file system. Handling (all) permissions and links carefully was crucial for succeeding in this project, teaching me about UNIX as a whole. 
+
+2. **Reading manuals is fun (because it's necessary)**
 
 	Handling multiple essential system level functions regarding navigating file permissions and extracting status information reliably was feasible only by reading and comprehending the `mans` concerning those functions. I'm an advocate for reading given instructions, but I'm still happy I was able to dodge a few bullets by just reading. Especially understanding the types of errors thrown by functions like `readdir(3)` gives a more intimate understanding of the innards of UNIX as a system.
 
-2. **Initial testing, research and design are TIGHTLY connected**
+3. **Initial testing, research and design are TIGHTLY connected**
   
 	While keeping code modular for further expansion is important, it's still really important to make as good and informed choices at the very beginning of a project to set the sights correctly. In my case, I ended up adding a separate layer of file list collection for *arguments*, when there already existed a functionality for collecting lists from *directory entries*. This added layer could've most likely been fused with the existing implementation, had I realised earlier that the arguments to be listed to output need to be sorted as *files first, directories second* principle. A small-ish oversight, but took my sleep for a few days in the end.
 
