@@ -3,8 +3,6 @@
 ## Introduction
 `ft_ls` is the introductory project to the world of UNIX systems programming branch in Hive Helsinki. The assignment is to reimplement one of the first shell commands one encounters: `ls`, listing directory entries.
 
-As the project is a school project, key takeaway here is the learning it yielded. Listed below are some of the more important goals and takeaways from the project.
-
 ## Learning objectives
 The project serves as a reminder of some previously used *system API functions*, and brings in multiple new ones.
 Similarly, it's an *exercise in error handling*: the UNIX file system has multiple file types, of which some have special characteristics in terms of errors and the general display. Simply exiting upon minor errors isn't the case here.
