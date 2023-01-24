@@ -1,4 +1,4 @@
-# `ft_ls`: When content matters
+# `ft_ls`: List directory
 
 ## Introduction
 `ft_ls` is the introductory project to the world of UNIX systems programming branch in Hive Helsinki. The assignment is to reimplement one of the first shell commands one encounters: `ls`, listing directory entries.
